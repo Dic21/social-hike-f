@@ -18,7 +18,7 @@ const Event = () => {
       placeId: "p01",
       maxNumOfTeamMember: 5,
       startTime: Date.now(),
-      startPoint: POINT(47.651, -122.349, 4326),
+      startPoint: (47.651, -122.349, 4326),
       endPoint: (47.651, -122.349, 4326),
       path: 1,
       difficulty: "easy",
