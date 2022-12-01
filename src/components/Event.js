@@ -1,9 +1,34 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  inputEventName,
+  inputMaxMember,
+  inputStartTime,
+  inputstartPointX,
+  inputstartPointY,
+  inputendPointX,
+  inputendPointY,
+  inputDescription,
+  selectDifficulty,
+  selectHikingTrail,
+} from "../Slices/eventSlice";
 
 const Event = () => {
-  let eventName;
-  let hostName;
-  let placeID;
+  const dispatch = useDispatch();
+
+  const {
+    eventName,
+    maxMember,
+    startTime,
+    startPoint,
+    endPoint,
+    hikingTrail,
+    description,
+    difficulty,
+  } = useSelector((state) => {
+    return state.event;
+  });
 
   const handleCreateEvent = () => {
     fetch("/event", {
@@ -26,7 +51,7 @@ const Event = () => {
         distance: 1,
         description: "1",
         isFinish: false,
-        hikingTime: 1,``
+        hikingTime: 1,
       }),
     })
       .then((res) => res.json())
@@ -42,7 +67,7 @@ const Event = () => {
         <input
           type="text"
           onChange={(e) => {
-            eventName = e.target.value;
+            dispatch(inputEventName(e.target.value));
           }}
         />
       </div>
@@ -119,14 +144,13 @@ const Event = () => {
         </div>
       </div>
 
-      <div className="select-page">
+      <div className="select-place">
         <span>place:</span>
         <select
           name="place"
           id="place"
           onChange={(e) => {
-            placeID = e.target.value;
-            console.log(placeID);
+            console.log(e);
           }}
         >
           <option value="p01">Hong Kong Trail</option>
@@ -136,6 +160,26 @@ const Event = () => {
         </select>
       </div>
 
+      <div className="input-description">
+        <span> Description</span>
+        <textarea placeholder="input description here"></textarea>
+      </div>
+
+      <div className="select-difficulty">
+        <span>Difficulty:</span>
+        <select
+          name="difficulty"
+          id="difficulty"
+          onChange={(e) => {
+            difficulty = e.target.value;
+            console.log(difficulty);
+          }}
+        >
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
       <button onClick={handleCreateEvent}>Create event</button>
     </div>
   );
