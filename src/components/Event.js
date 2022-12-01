@@ -26,7 +26,7 @@ const Event = () => {
         distance: 1,
         description: "1",
         isFinish: false,
-        hikingTime: 1,``
+        hikingTime: 1,
       }),
     })
       .then((res) => res.json())
