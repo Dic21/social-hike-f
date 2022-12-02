@@ -3,6 +3,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Event from "./Components/Event";
 import Login from "./Components/Login";
 import HikingTrails from "./Components/HikingTrails";
+import HikingTrailsDetail from "./Components/HikingTrailsDetail";
 
 function Protected(props){
   return (
@@ -22,7 +23,12 @@ function App() {
             <Event/>
           </Protected>}>
         </Route>
-        <Route path="/place" element={<HikingTrails/>}></Route>
+        <Route path="/place" element={<HikingTrails/>}>
+          {/* <Route path=":placeId" element={<HikingTrailsDetail/>}/> */}
+
+        </Route>
+        <Route path="/place/:placeId" element={<HikingTrailsDetail/>}/>
+        
 
 
       </Routes>
