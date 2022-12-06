@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import length from "leaflet-geometryutil";
 import { useSelector, useDispatch } from "react-redux";
-
+import { Navigate, useNavigate } from "react-router-dom";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+  MapConsumer,
+} from "react-leaflet";
+import L from "leaflet";
+import { Icon } from "leaflet";
 import {
   inputEventName,
   inputMaxMember,
   inputStartTime,
-  inputstartPointX,
-  inputstartPointY,
-  inputendPointX,
-  inputendPointY,
+  inputStartPoint,
+  inputEndPoint,
+  inputDistance,
+  inputHikingTime,
   inputDescription,
   selectDifficulty,
   selectHikingTrail,
@@ -23,42 +34,110 @@ const Event = () => {
     startTime,
     startPoint,
     endPoint,
-    hikingTrail,
+    distance,
+    hikingTrailID,
     description,
+    hikingTime,
     difficulty,
   } = useSelector((state) => {
     return state.event;
   });
 
+  const { isLogin } = useSelector((state) => {
+    return state.login;
+  });
+
+  const navigate = useNavigate();
+
+  const wayPoint = [];
+
+  function MapComponent() {
+    const map = useMapEvents({
+      click: (e) => {
+        if (wayPoint.length < 1) {
+          const { lat, lng } = e.latlng;
+          L.marker([lat, lng])
+            .bindPopup(
+              `<h4>Start Point</h4>
+              <p>lat:${lat}</p>
+              <p>lng:${lng}</p>`
+            )
+            .openPopup()
+            .addTo(map);
+
+          wayPoint.push({ lat, lng, latlng: e.latlng });
+        } else if (wayPoint.length < 2) {
+          const { lat, lng } = e.latlng;
+          L.marker([lat, lng])
+            .bindPopup(
+              `<h4>End Point</h4>
+              <p>lat:${lat}</p>
+              <p>lng:${lng}</p>`
+            )
+            .openPopup()
+            .addTo(map);
+          wayPoint.push({ lat, lng, latlng: e.latlng });
+          dispatch(inputStartPoint({ x: wayPoint[0].lat, y: wayPoint[0].lng }));
+          dispatch(inputEndPoint({ x: wayPoint[1].lat, y: wayPoint[1].lng }));
+        }
+
+        if (wayPoint[0] && wayPoint[1]) {
+          // draw the line between points
+          L.polyline([wayPoint[0].latlng, wayPoint[1].latlng], {
+            color: "red",
+          }).addTo(map);
+
+          let length = L.GeometryUtil.length(
+            // map,
+            [wayPoint[0].latlng, wayPoint[1].latlng]
+          );
+          dispatch(inputDistance(length));
+          console.log(length);
+        }
+      },
+    });
+    return null;
+  }
+
   const handleCreateEvent = () => {
     fetch("/event", {
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoia2l0IiwidXNlcklkIjoia0k4c2F6T0hqXyIsInJlZ2lzdGVyVGltZSI6IjIwMjItMTEtMTRUMDk6NDY6MTEuMTU3WiIsImlhdCI6MTY2ODQxOTI0M30.rJ5k9LG36A_F2c9s2QsaQqVjQOwhoqzb7q5T8wqGu3A",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify({
-        eventName: "coding",
+        eventName: eventName,
         username: "jayjay",
-        placeId: "p02",
-        maxNumOfTeamMember: 5,
-        startTime: new Date(),
-        startPoint: { x: 23.3129033, y: 115.2180816 },
-        endPoint: { x: 22.3129033, y: 114.2180816 },
+        placeId: hikingTrailID,
+        maxNumOfTeamMember: maxMember,
+        startTime: startTime,
+        startPoint: startPoint,
+        endPoint: endPoint,
         //  path: LINESTRING(1 1,2 3,4 8, -6 3),
-        difficulty: "hard",
-        distance: 1,
-        description: "1",
+        difficulty: difficulty,
+        distance: 1, //TODO
+        description: description,
         isFinish: false,
-        hikingTime: 1,
+        hikingTime: hikingTime,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
+        if (data.success) {
+          alert("Event created successfully!");
+
+          navigate(`/event/${data.insertId}/detail`);
+        } else {
+          alert("Please enter all require info!");
+        }
       });
   };
+
+  if (!isLogin) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div>
@@ -77,7 +156,7 @@ const Event = () => {
         <input
           type="text"
           onChange={(e) => {
-            eventName = e.target.value;
+            dispatch(inputMaxMember(e.target.value));
           }}
         />
       </div>
@@ -85,9 +164,10 @@ const Event = () => {
       <div className="input-start-time">
         <span> Start Time</span>
         <input
-          type="text"
+          type="datetime-local"
           onChange={(e) => {
-            eventName = e.target.value;
+            console.log(e.target.value);
+            dispatch(inputStartTime(e.target.value));
           }}
         />
       </div>
@@ -97,18 +177,31 @@ const Event = () => {
         <input
           type="text"
           onChange={(e) => {
-            eventName = e.target.value;
+            dispatch(inputHikingTime(e.target.value));
           }}
         />
       </div>
 
-      <div className="input-start-point">
+      <div className="start-point">
+        <span>Start Point: </span>
+        <span>lat:{startPoint.x} </span>
+        <span>lng:{startPoint.y}</span>
+      </div>
+
+      <div className="end-point">
+        <span>End Point: </span>
+        <span>lat:{endPoint.x} </span>
+        <span>lng:{endPoint.y}</span>
+      </div>
+
+      {/* <div className="input-start-point">
         <div className="input-start-point-x">
           <span> Start point X</span>
           <input
             type="text"
+            value={wayPoint[0] ? wayPoint[0].lat : ""}
             onChange={(e) => {
-              eventName = e.target.value;
+              dispatch(inputstartPointX(e.target.value));
             }}
           />
         </div>
@@ -116,8 +209,9 @@ const Event = () => {
           <span> Start point Y</span>
           <input
             type="text"
+            value={wayPoint[0]?.lng}
             onChange={(e) => {
-              eventName = e.target.value;
+              dispatch(inputstartPointY(e.target.value));
             }}
           />
         </div>
@@ -129,7 +223,7 @@ const Event = () => {
           <input
             type="text"
             onChange={(e) => {
-              eventName = e.target.value;
+              dispatch(inputendPointX(e.target.value));
             }}
           />
         </div>
@@ -138,10 +232,14 @@ const Event = () => {
           <input
             type="text"
             onChange={(e) => {
-              eventName = e.target.value;
+              dispatch(inputendPointY(e.target.value));
             }}
           />
         </div>
+      </div> */}
+
+      <div className="distance">
+        distance:{distance ? distance.toFixed(2) : null}m
       </div>
 
       <div className="select-place">
@@ -150,9 +248,11 @@ const Event = () => {
           name="place"
           id="place"
           onChange={(e) => {
-            console.log(e);
+            console.log(e.target.value);
+            dispatch(selectHikingTrail(e.target.value));
           }}
         >
+          <option value="">--Select Hiking Trail--</option>
           <option value="p01">Hong Kong Trail</option>
           <option value="p02">Lantau Trail</option>
           <option value="p03">Wilson Trail</option>
@@ -162,7 +262,12 @@ const Event = () => {
 
       <div className="input-description">
         <span> Description</span>
-        <textarea placeholder="input description here"></textarea>
+        <textarea
+          placeholder="input description here"
+          onChange={(e) => {
+            dispatch(inputDescription(e.target.value));
+          }}
+        ></textarea>
       </div>
 
       <div className="select-difficulty">
@@ -171,16 +276,29 @@ const Event = () => {
           name="difficulty"
           id="difficulty"
           onChange={(e) => {
-            difficulty = e.target.value;
-            console.log(difficulty);
+            dispatch(selectDifficulty(e.target.value));
           }}
         >
+          <option value="">--Select Difficulty--</option>
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
         </select>
       </div>
       <button onClick={handleCreateEvent}>Create event</button>
+
+      <MapContainer
+        center={[22.3128786, 114.2115803]}
+        zoom={15}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        <MapComponent />
+      </MapContainer>
     </div>
   );
 };
