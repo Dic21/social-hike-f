@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import 'moment/locale/zh-hk'
+import "moment/locale/zh-hk";
 import { useDispatch, useSelector } from "react-redux";
 import {showDetails,showEvents,setVisibles,showComments,showModal,updateText,updatePicFile} from "../Slices/placeSlice";
 import {Link, useParams} from 'react-router-dom';
@@ -10,72 +10,87 @@ import userIcon from "../Images/person.svg";
 
 
 const HikingTrailsDetail = () => {
-  const { details, eventList, visibles, cmList, modalDisplay } = useSelector((state)=>{return state.place});
+  const { details, eventList, visibles, cmList, modalDisplay } = useSelector(
+    (state) => {
+      return state.place;
+    }
+  );
 
   const { placeId } = useParams();
   const dispatch = useDispatch();
   let info, eventData;
-  useEffect(()=>{
+  useEffect(() => {
     fetchData();
     fetchCmData();
-  }, [])
+  }, []);
 
-  const fetchData = ()=>{
-    fetch(`/place/${placeId}`).then(resData=>resData.json()).then((data)=>{
-      info = data.info[0];
-      eventData = data.event;
-      let details= {info};
-      dispatch(showDetails(details));
-      dispatch(showEvents(eventData));
-    })
-  }
+  const fetchData = () => {
+    fetch(`/place/${placeId}`)
+      .then((resData) => resData.json())
+      .then((data) => {
+        info = data.info[0];
+        eventData = data.event;
+        let details = { info };
+        dispatch(showDetails(details));
+        dispatch(showEvents(eventData));
+      });
+  };
 
   //server-side pagination
-  const fetchCmData =()=>{
-    fetch(`/place/${placeId}/comment?limit=0`).then(resData=>resData.json()).then((data)=>{
-      let cmList = data.cm;
-      dispatch(showComments(cmList));
-    })
-  }
-  const loadMoreCm =(limit)=>{
-    fetch(`/place/${placeId}/comment?limit=${limit}`).then(resData=>resData.json()).then((data)=>{
-      const newCmList = [...cmList, ...data.cm];
-      dispatch(showComments(newCmList));
-    })
-  }
+  const fetchCmData = () => {
+    fetch(`/place/${placeId}/comment?limit=0`)
+      .then((resData) => resData.json())
+      .then((data) => {
+        let cmList = data.cm;
+        dispatch(showComments(cmList));
+      });
+  };
+  const loadMoreCm = (limit) => {
+    fetch(`/place/${placeId}/comment?limit=${limit}`)
+      .then((resData) => resData.json())
+      .then((data) => {
+        const newCmList = [...cmList, ...data.cm];
+        dispatch(showComments(newCmList));
+      });
+  };
 
-  const handleSortChange =(value)=>{
+  const handleSortChange = (value) => {
     console.log(value);
-    if(value==="latestPublish"){
+    if (value === "latestPublish") {
       const sortList = [...eventList];
-      sortList.sort((a,b)=>{return b.id - a.id});
+      sortList.sort((a, b) => {
+        return b.id - a.id;
+      });
       dispatch(showEvents(sortList));
       dispatch(setVisibles(2));
-    }else if(value==="recent"){
+    } else if (value === "recent") {
       const sortList = [...eventList];
-      sortList.sort((a,b)=>{return new Date(a.event_start_time) - new Date(b.event_start_time)});
+      sortList.sort((a, b) => {
+        return new Date(a.event_start_time) - new Date(b.event_start_time);
+      });
       dispatch(showEvents(sortList));
       dispatch(setVisibles(2));
     }
-  }
+  };
 
-  const loadMore = ()=>{
-    dispatch(setVisibles(visibles+2));
-  }
+  const loadMore = () => {
+    dispatch(setVisibles(visibles + 2));
+  };
 
-  const addComment=()=>{
-    dispatch(showModal(true))
-  }
+  const addComment = () => {
+    dispatch(showModal(true));
+  };
 
+  const navigate = useNavigate();
 
-  if(!details){
-    return <div>Loading...</div>
+  if (!details) {
+    return <div>Loading...</div>;
   }
   return (
     <div>
-      <div className={placeStyle.banner} >
-        <div id={placeStyle[details.info.id]}>   
-          {/* <div>{details && details.name}</div> */}   
+      <div className={placeStyle.banner}>
+        <div id={placeStyle[details.info.id]}>
+          {/* <div>{details && details.name}</div> */}
           <h3>{details.info.chi_name}</h3>
         </div>
       </div>
@@ -86,14 +101,26 @@ const HikingTrailsDetail = () => {
           <div className={placeStyle["event-headline"]}>
             <div className={placeStyle.mediumtitle}>活動</div>
             <span className={placeStyle["event-headline-right"]}>
-              <span className={placeStyle.createbtn}>建立活動</span>
+              <span
+                className={placeStyle.createbtn}
+                onClick={() => {
+                  navigate("/event");
+                }}
+              >
+                建立活動
+              </span>
             </span>
           </div>
 
           <div className={placeStyle["event-headline"]}>
-            <div>準備出發的活動: {details.info.num? details.info.num: 0}</div>
+            <div>準備出發的活動: {details.info.num ? details.info.num : 0}</div>
             <div className={placeStyle["event-headline-right"]}>
-              <select name="sorting" onChange={(e)=>{handleSortChange(e.target.value)}}>
+              <select
+                name="sorting"
+                onChange={(e) => {
+                  handleSortChange(e.target.value);
+                }}
+              >
                 <option value="latestPublish">最新建立</option>
                 <option value="recent">最快起行</option>
               </select>
@@ -110,11 +137,13 @@ const HikingTrailsDetail = () => {
         </div>
 
         <div className={placeStyle.right}>
-            <div className={placeStyle["event-headline"]}>
-                <div className={placeStyle.mediumtitle}>評論</div>
-              <span className={placeStyle["event-headline-right"]}>
-                <span className={placeStyle.createbtn} onClick={addComment}>建立評論</span>
+          <div className={placeStyle["event-headline"]}>
+            <div className={placeStyle.mediumtitle}>評論</div>
+            <span className={placeStyle["event-headline-right"]}>
+              <span className={placeStyle.createbtn} onClick={addComment}>
+                建立評論
               </span>
+            </span>
             </div>
             <div className={placeStyle["event-headline"]}>
                 {details.info.cmnum>=1? `顯示全部${details.info.cmnum}個回應中的${cmList.length}個`: <span>&nbsp;</span>}
@@ -174,8 +203,8 @@ const Comment = React.memo((props)=>{
       </div>
     
     </div>
-  )
-})
+  );
+});
 
 const Modal=(props)=>{
   const { details, modalDisplay, comment, picFile } = useSelector((state)=>{return state.place});
@@ -185,7 +214,7 @@ const Modal=(props)=>{
   const fileRef = useRef();
   const closeModal=()=>{
     dispatch(showModal(false));
-  }
+  };
   //if loggedIn state false, can show a btn to loginpage
 
   const handleCmInput = (e)=>{
@@ -257,8 +286,8 @@ const Modal=(props)=>{
           {!msgSent? cmBox: successBox}
         </div>
       </div>
-    )
-  }else{
+    );
+  } else {
     return null;
   }
 }
