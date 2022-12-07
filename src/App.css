@@ -1,6 +1,7 @@
 .leaflet-container {
-  width: 50%;
+  width: 90%;
   height: 50vh;
+  margin: auto;
 }
 
 .line {
@@ -13,4 +14,25 @@
 .error {
   color: red;
   font-weight: bolder;
+}
+
+nav{
+  background-color: rgb(15, 81, 15);
+  height:30px;
+  display: flex;
+  align-items: center;
+}
+
+nav>a, .navright>a{
+  color: white;
+  text-decoration: none;
+  padding: 1rem;
+}
+.navright{
+  margin-left: auto;
+  margin-right:15px;
+}
+
+body{
+  margin:0;
 }

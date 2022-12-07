@@ -3,7 +3,7 @@ import moment from "moment";
 import "moment/locale/zh-hk";
 import { useDispatch, useSelector } from "react-redux";
 import {showDetails,showEvents,setVisibles,showComments,showModal,updateText,updatePicFile} from "../Slices/placeSlice";
-import {Link, useParams} from 'react-router-dom';
+import {Link, useParams,useNavigate} from 'react-router-dom';
 import placeStyle from '../Place.module.css';
 import closePic from "../Images/x-square-fill.svg";
 import userIcon from "../Images/person.svg";
@@ -94,60 +94,56 @@ const HikingTrailsDetail = () => {
           <h3>{details.info.chi_name}</h3>
         </div>
       </div>
-      <div className={placeStyle.placedesc}>{details.info.description}</div>
-      <hr></hr>
-      <div className={placeStyle.detailcontainer}>
-        <div className={placeStyle.left}>
-          <div className={placeStyle["event-headline"]}>
-            <div className={placeStyle.mediumtitle}>活動</div>
-            <span className={placeStyle["event-headline-right"]}>
-              <span
-                className={placeStyle.createbtn}
-                onClick={() => {
-                  navigate("/event");
-                }}
-              >
-                建立活動
+      
+      <div className={placeStyle.bodycontainer}>
+        <div className={placeStyle.placedesc}>{details.info.description}</div>
+        <hr></hr>
+        <div className={placeStyle.detailcontainer}>
+          <div className={placeStyle.left}>
+            <div className={placeStyle["event-headline"]}>
+              <div className={placeStyle.mediumtitle}>活動</div>
+              <span className={placeStyle["event-headline-right"]}>
+                <span className={placeStyle.createbtn} onClick={() => {navigate("/event");}}>
+                  建立活動
+                </span>
               </span>
-            </span>
-          </div>
+            </div>
 
-          <div className={placeStyle["event-headline"]}>
-            <div>準備出發的活動: {details.info.num ? details.info.num : 0}</div>
-            <div className={placeStyle["event-headline-right"]}>
-              <select
-                name="sorting"
-                onChange={(e) => {
-                  handleSortChange(e.target.value);
-                }}
-              >
-                <option value="latestPublish">最新建立</option>
-                <option value="recent">最快起行</option>
-              </select>
+            <div className={placeStyle["event-headline"]}>
+              <div>準備出發的活動: {details.info.num ? details.info.num : 0}</div>
+              <div className={placeStyle["event-headline-right"]}>
+                <select
+                  name="sorting"
+                  onChange={(e) => {
+                    handleSortChange(e.target.value);
+                  }}
+                >
+                  <option value="latestPublish">最新建立</option>
+                  <option value="recent">最快起行</option>
+                </select>
+              </div>
+            </div>
+            <div className={placeStyle['event-container']}>          
+              {eventList.length>=1? eventList.slice(0,visibles).map((event)=>{
+                return (
+                  <Event key={event.id} info={event}/>
+                )
+              }):<div>暫時沒有可參與的活動</div>}
+              {eventList.length<=visibles? <p>-----</p>: <button className={placeStyle.morebtn} onClick={loadMore}>展開更多</button>}
             </div>
           </div>
-          <div className={placeStyle['event-container']}>          
-            {eventList.length>=1? eventList.slice(0,visibles).map((event)=>{
-              return (
-                <Event key={event.id} info={event}/>
-              )
-            }):<div>暫時沒有可參與的活動</div>}
-            {eventList.length<=visibles? <p>-----</p>: <button className={placeStyle.morebtn} onClick={loadMore}>展開更多</button>}
-          </div>
-        </div>
 
-        <div className={placeStyle.right}>
-          <div className={placeStyle["event-headline"]}>
-            <div className={placeStyle.mediumtitle}>評論</div>
-            <span className={placeStyle["event-headline-right"]}>
-              <span className={placeStyle.createbtn} onClick={addComment}>
-                建立評論
-              </span>
-            </span>
+          <div className={placeStyle.right}>
+            <div className={placeStyle["event-headline"]}>
+              <div className={placeStyle.mediumtitle}>評論</div>
+                <span className={placeStyle["event-headline-right"]}>
+                  <span className={placeStyle.createbtn} onClick={addComment}>
+                    建立評論
+                  </span>
+                </span>
             </div>
             <div className={placeStyle["event-headline"]}>
                 {details.info.cmnum>=1? `顯示全部${details.info.cmnum}個回應中的${cmList.length}個`: <span>&nbsp;</span>}
-                
             </div>
             <div className={placeStyle['event-container']}>       
               {cmList.length>=1?    
@@ -156,12 +152,14 @@ const HikingTrailsDetail = () => {
                 }): <div>暫時沒有評論</div>
               }     
               {cmList.length===details.info.cmnum|| cmList.length===0? <p>-----</p>:<button className={placeStyle.morebtn} onClick={()=>{loadMoreCm(cmList.length)}}>展開更多</button>}
-              
               <Modal cmfetch={fetchCmData}/>
             </div>
+          </div>
         </div>
       </div>
     </div>
+
+    
   );
 };
 
@@ -195,19 +193,19 @@ const Comment = React.memo((props)=>{
       <div><img src={userIcon}></img> {props.info.publisher}</div>
       <div>{dateFromNow}</div>
       <div>{props.info.message}</div>
-      <div className={placeStyle.imagebox}>{imageBox? imageBox.map((img)=>{
-        let path = img.slice(1);
-        return <img key={path} src={path} width="50px"></img>
-      }):null}
-        
+      <div className={placeStyle.imagebox}>
+        {imageBox? imageBox.map((img)=>{
+          let path = img.slice(1);
+          return <img key={path} src={path}></img>
+        }):null}
       </div>
-    
     </div>
   );
 });
 
 const Modal=(props)=>{
   const { details, modalDisplay, comment, picFile } = useSelector((state)=>{return state.place});
+  const { isLogin } = useSelector((state) => { return state.login});
   const dispatch = useDispatch();
   const [isFile, setIsFile] = useState(false);
   const [msgSent, setMsgSent] = useState(false);
@@ -215,7 +213,6 @@ const Modal=(props)=>{
   const closeModal=()=>{
     dispatch(showModal(false));
   };
-  //if loggedIn state false, can show a btn to loginpage
 
   const handleCmInput = (e)=>{
     setTimeout(()=>{
@@ -233,7 +230,7 @@ const Modal=(props)=>{
   }
 
   const handleSubmit= ()=>{
-    let token = JSON.parse(localStorage.getItem("token"));
+    let token = localStorage.getItem("token");
     let placeId = details.info.id;
 
     const formData = new FormData();
@@ -268,7 +265,7 @@ const Modal=(props)=>{
 
   const cmBox = 
     (<div className={placeStyle.modalcm}>
-      <textarea id={placeStyle.userinputbox} onChange={handleCmInput} placeholder="Type your comment"></textarea>
+      <textarea id={placeStyle.userinputbox} onChange={handleCmInput} placeholder="新增留言..."></textarea>
       <div>分享照片<input type="file" ref={fileRef} name="pictures" accept="image/png, image/jpeg" onChange={handleFileInput} multiple></input></div>
       <button onClick={handleSubmit}>Send</button>
     </div>);
@@ -279,14 +276,27 @@ const Modal=(props)=>{
     </div>);
 
   if(modalDisplay){
-    return(
-      <div className={placeStyle.modal}>
-        <div className={placeStyle.modalcontent}>
-          <span onClick={closeModal}><img src={closePic}></img></span>
-          {!msgSent? cmBox: successBox}
+    if(!isLogin){
+      return (
+        <div className={placeStyle.modal}>
+          <div className={`${placeStyle["modalcontent"]} ${placeStyle["loginmodal"]}`}>
+            <span onClick={closeModal}><img src={closePic}></img></span>
+              <div>請先登入</div>
+              <Link to="/login">登入</Link>
+              <Link to="/register">註冊</Link>
+          </div>
         </div>
-      </div>
-    );
+      )
+    }else{
+      return(
+        <div className={placeStyle.modal}>
+          <div className={placeStyle.modalcontent}>
+            <span onClick={closeModal}><img src={closePic}></img></span>
+            {!msgSent? cmBox: successBox}
+          </div>
+        </div>
+      );
+    }
   } else {
     return null;
   }

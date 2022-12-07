@@ -57,9 +57,8 @@ const HikingTrails = () => {
     <div>
       <h2>HikingTrails</h2>
       <MapContainer
-        // center={[22.3128786, 114.2115803]}
-        center={[22.27463, 114.14907]}
-        zoom={10}
+        center={[22.31463, 114.15907]}
+        zoom={11}
         scrollWheelZoom={false}
       >
         <TileLayer
@@ -69,9 +68,9 @@ const HikingTrails = () => {
 
         {hikingTrail.map(({ position, name, distance, id }) => {
           return (
-            <Marker position={position}>
+            <Marker key={name} position={position}>
               <Popup>
-                <h3>{name}</h3>
+                <div style={{fontWeight: 600, fontSize: 20}}>{name}</div>
                 <p>全長:{distance}公里</p>
                 <button>
                   <Link to={`/place/${id}`}>查看正在舉行的活動</Link>
@@ -82,29 +81,34 @@ const HikingTrails = () => {
         })}
       </MapContainer>
       <br></br>
-      <div className={placeStyle.selection}>
-        {list.map((item) => {
-          return (
-            <Link
-              key={item.name}
-              to={`/place/${item.id}`}
-              className={placeStyle.linkbox}
-            >
-              <div className={placeStyle.imgcontainer}>
-                <div className={placeStyle.box} id={placeStyle[item.id]}></div>
-                <div className={placeStyle.textbox}></div>
-              </div>
-              <div className={placeStyle.para}>
-                <div className={placeStyle.title}>{item.chi_name}</div>
-                <div className={placeStyle.small}>{item.name}</div>
-                <div className={placeStyle.small}>
-                  可參加活動: {item.num ? item.num : 0}
+      
+      <div>
+        <div className={placeStyle.recomtitle}>推薦地點</div>
+        <div className={placeStyle.selection}>
+          {list.map((item) => {
+            return (
+              <Link
+                key={item.name}
+                to={`/place/${item.id}`}
+                className={placeStyle.linkbox}
+              >
+                <div className={placeStyle.imgcontainer}>
+                  <div className={placeStyle.box} id={placeStyle[item.id]}></div>
+                  <div className={placeStyle.textbox}></div>
                 </div>
-              </div>
-            </Link>
-          );
-        })}
+                <div className={placeStyle.para}>
+                  <div className={placeStyle.title}>{item.chi_name}</div>
+                  <div className={placeStyle.small}>{item.name}</div>
+                  <div className={placeStyle.small}>
+                    可參加活動: {item.num ? item.num : 0}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
+
     </div>
   );
 };

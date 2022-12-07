@@ -1,11 +1,13 @@
 import "./App.css";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Event from "./Components/Event";
 import EventDetail from "./Components/EventDetail";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import HikingTrails from "./Components/HikingTrails";
 import HikingTrailsDetail from "./Components/HikingTrailsDetail";
+import loginImage from "./Images/login.svg";
 
 function Protected(props) {
   return props.loggedIn ? (
@@ -15,30 +17,56 @@ function Protected(props) {
   );
 }
 
+function IsLoggedIn(props){
+  return (
+    props.loggedIn ? <Navigate to="/" replace={true}/> : props.children
+  )
+}
+
+function Nav(){
+  const { isLogin } = useSelector((state) => { return state.login});
+
+  return(
+    <nav>
+      <Link to="/">主頁</Link>
+      <span className="navright">
+        {!isLogin ? <>
+          <Link to="/login">
+            <span>
+              <img src={loginImage}/> 登入
+            </span>
+          </Link>
+          <Link to="/register">
+            <span> 
+              註冊
+            </span>
+          </Link>
+        </>: <span>歡迎回來</span>}
+      </span>
+    </nav>
+  )
+}
+
 function App() {
-  // const [loggedIn] = useSelector(function(state){return state.bank.loggedIn;});
+  const { isLogin } = useSelector((state) => { return state.login});
 
   return (
     <div className="App">
-      {/* <Login /> */}
-      {/* <Event /> */}
-      {/* <EventDetail /> */}
+      <Nav/>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<HikingTrails />}/>
+        <Route path="/login" element={<IsLoggedIn loggedIn={isLogin}><Login/></IsLoggedIn>} />
+        <Route path="/register" element={<IsLoggedIn loggedIn={isLogin}><Register/></IsLoggedIn>} />
         <Route
           path="/event"
           element={
-            // <Protected>
-            <Event />
-            // </Protected>
+            <Protected loggedIn={isLogin}>
+              <Event />
+            </Protected>
           }
         ></Route>
         <Route path="/event/:eventId/detail" element={<EventDetail />} />
 
-        <Route path="/place" element={<HikingTrails />}>
-          {/* <Route path=":placeId" element={<HikingTrailsDetail/>}/> */}
-        </Route>
         <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
       </Routes>
       {/* <Routes>
