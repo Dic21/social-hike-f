@@ -36,7 +36,7 @@ const Register = () => {
         } else {
           console.log(`Register successfully`);
           dispatch(logRegisterErrorMessage(""));
-          navigate("/event");
+          navigate("/place");
         }
       });
   };

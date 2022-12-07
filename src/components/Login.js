@@ -58,7 +58,7 @@ const Login = () => {
           dispatch(logIsLogin(true));
           localStorage.setItem("token", data.token);
 
-          navigate("/event");
+          navigate("/place");
         }
       });
   };

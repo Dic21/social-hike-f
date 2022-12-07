@@ -141,16 +141,16 @@ const EventDetail = () => {
         <div>Cannot load map! Insufficient Data</div>
       )}
 
-      <h5>Date:{date}</h5>
-      <h5>Start Time:{time}</h5>
+      <h5>日期:{date}</h5>
+      <h5>時間:{time}</h5>
 
-      <h5>Difficulty:{difficulty}</h5>
-      <h5>Max Participant: {max}</h5>
+      <h5>難度:{difficulty}</h5>
+      <h5>最多人數: {max}</h5>
 
       <button disabled={joinedMember.length > max ? true : false}>
-        Join Event
+        加入活動
       </button>
-      {joinedMember.length > max ? <p>Sorry, this event is fulled</p> : null}
+      {joinedMember.length > max ? <p>抱歉，此活動已滿</p> : null}
     </div>
   );
 };

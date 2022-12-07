@@ -108,7 +108,6 @@ const Event = () => {
       method: "POST",
       body: JSON.stringify({
         eventName: eventName,
-        username: "jayjay",
         placeId: hikingTrailID,
         maxNumOfTeamMember: maxMember,
         startTime: startTime,
@@ -142,7 +141,7 @@ const Event = () => {
   return (
     <div>
       <div className="input-event-name">
-        <span> Event name</span>
+        <span> 活動名稱</span>
         <input
           type="text"
           onChange={(e) => {
@@ -152,7 +151,7 @@ const Event = () => {
       </div>
 
       <div className="input-max-number">
-        <span> Max Number</span>
+        <span> 最多人數</span>
         <input
           type="text"
           onChange={(e) => {
@@ -162,7 +161,7 @@ const Event = () => {
       </div>
 
       <div className="input-start-time">
-        <span> Start Time</span>
+        <span> 活動日期</span>
         <input
           type="datetime-local"
           onChange={(e) => {
@@ -173,7 +172,7 @@ const Event = () => {
       </div>
 
       <div className="input-hiking-time">
-        <span> Hiking Time</span>
+        <span> 預計步行時間</span>
         <input
           type="text"
           onChange={(e) => {
@@ -183,13 +182,13 @@ const Event = () => {
       </div>
 
       <div className="start-point">
-        <span>Start Point: </span>
+        <span>起點: </span>
         <span>lat:{startPoint.x} </span>
         <span>lng:{startPoint.y}</span>
       </div>
 
       <div className="end-point">
-        <span>End Point: </span>
+        <span>終點: </span>
         <span>lat:{endPoint.x} </span>
         <span>lng:{endPoint.y}</span>
       </div>
@@ -239,11 +238,11 @@ const Event = () => {
       </div> */}
 
       <div className="distance">
-        distance:{distance ? distance.toFixed(2) : null}m
+        路線長度:{distance ? distance.toFixed(2) : null}米
       </div>
 
       <div className="select-place">
-        <span>place:</span>
+        <span>路線:</span>
         <select
           name="place"
           id="place"
@@ -252,18 +251,17 @@ const Event = () => {
             dispatch(selectHikingTrail(e.target.value));
           }}
         >
-          <option value="">--Select Hiking Trail--</option>
-          <option value="p01">Hong Kong Trail</option>
-          <option value="p02">Lantau Trail</option>
-          <option value="p03">Wilson Trail</option>
-          <option value="p04">Maclehose Trail</option>
+          <option value="">--請選擇路線--</option>
+          <option value="p01">港島徑</option>
+          <option value="p02">鳳凰徑</option>
+          <option value="p03">衞奕信徑</option>
+          <option value="p04">麥理浩徑</option>
         </select>
       </div>
 
       <div className="input-description">
-        <span> Description</span>
+        <span> 行程描述</span>
         <textarea
-          placeholder="input description here"
           onChange={(e) => {
             dispatch(inputDescription(e.target.value));
           }}
@@ -271,7 +269,7 @@ const Event = () => {
       </div>
 
       <div className="select-difficulty">
-        <span>Difficulty:</span>
+        <span>難度:</span>
         <select
           name="difficulty"
           id="difficulty"
@@ -279,13 +277,13 @@ const Event = () => {
             dispatch(selectDifficulty(e.target.value));
           }}
         >
-          <option value="">--Select Difficulty--</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option value="">--請選擇難度--</option>
+          <option value="easy">容易</option>
+          <option value="medium">中等</option>
+          <option value="hard">困難</option>
         </select>
       </div>
-      <button onClick={handleCreateEvent}>Create event</button>
+      <button onClick={handleCreateEvent}>建立活動</button>
 
       <MapContainer
         center={[22.3128786, 114.2115803]}
