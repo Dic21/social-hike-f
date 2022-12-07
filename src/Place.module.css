@@ -11,6 +11,10 @@
     margin-right: 15px;
     position: relative;
 }
+.eventlinkbox{
+    text-decoration: none;
+    color: black;
+}
 .imgcontainer{
     overflow: hidden;
     height: 100%;
@@ -74,10 +78,14 @@
     font-size: 12px;
 }
 .eventbox{
-    border: 2px solid lightgrey;
-    margin-bottom:-1px;
-    background-color: antiquewhite;
+    border: 2px solid #f2f2f2;
+    margin-bottom: 5px;
+    background-color: #f7f7f7;
     text-align: left;
+    padding: 6px 15px;
+}
+.eventbox:hover{
+    box-shadow: 0px 1px 5px grey;
 }
 .event-container{
     overflow-y: scroll;
@@ -85,13 +93,15 @@
 }
 .event-headline{
     display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 .event-headline-right{
     margin-left: auto;
 }
 .mediumtitle{
     font-weight: 600;
-    font-size: 20px;
+    font-size: 25px;
 }
 .detailcontainer{
     display: flex;
@@ -106,12 +116,14 @@
 }
 .banner{
     height:200px;
+    position: relative;
 }
 .createbtn{
     background-color: lightgreen;
-    font-size: 12px;
-    padding: 5px;
-    border-radius: 10px;
+    font-size: 15px;
+    padding: 9px;
+    border-radius: 17px;
+    cursor: pointer;
 }
 .modal{
     position: fixed;
@@ -119,7 +131,7 @@
     bottom:0px;
     left:0px;
     top: 0px;
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(28, 28, 28, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,7 +146,48 @@
     margin-bottom:-1px;
     background-color: white;
     text-align: left;
-    height:250px;
+    min-height:250px;
+    padding: 15px 15px;
+    box-sizing: border-box;
+}
+#userinputbox{
+    width:400px;
+    height: 130px;
+}
+.modalcm{
+    padding: 0 25px;
+    text-align: left;
+}
+h3{
+    margin:0;
+    position: absolute;
+    bottom: 5px;
+    background-color: rgba(255,255,255,0.5);
+    padding: 20px;
+    left: 5px;
+    width: 30%;
+    border-radius: 8px;
+    font-size: 32px;
+}
+.placedesc{
+    text-align: left;    
+    margin-bottom: 15px;
+    margin-top: 7px;
+    padding: 5px;
+    border-left: 7px solid green;
+}
+h5{
+    margin:0;
+    font-size: 25px;
+    padding: 17px 0px;
+}
+.morebtn{
+    margin:10px;
+    background-color: lightseagreen;
+}
+.imagebox{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 

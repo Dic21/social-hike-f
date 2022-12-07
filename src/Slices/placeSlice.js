@@ -6,7 +6,9 @@ const initialState = {
     visibles: 2,
     eventList: [],
     cmList: [],
-    modalDisplay: false
+    modalDisplay: false,
+    comment: "",
+    picFile: []
 };
 
 export const placeSlice = createSlice({
@@ -30,6 +32,12 @@ export const placeSlice = createSlice({
         },
         showModal: function(state,action){
             state.modalDisplay = action.payload;
+        },
+        updateText: function(state,action){
+            state.comment = action.payload;
+        },
+        updatePicFile: function(state, action){
+            state.picFile = action.payload;
         }
     }
 });
@@ -40,7 +48,9 @@ export const {
     showEvents,
     setVisibles,
     showComments,
-    showModal
+    showModal,
+    updateText,
+    updatePicFile
 } = placeSlice.actions;
   
 export default placeSlice.reducer;
