@@ -164,7 +164,7 @@ const HikingTrailsDetail = () => {
 };
 
 const Event = (props)=>{
-  let startTime = moment(props.info.event_start_time).utc(true).format('YYYY-MM-DD HH:mm:ss');
+  let startTime = moment(props.info.event_start_time).format('YYYY-MM-DD HH:mm:ss');
   let eventId = props.info.id;
   return (
     <Link to={`/event/${eventId}/detail`} className={placeStyle.eventlinkbox}>
@@ -181,7 +181,7 @@ const Event = (props)=>{
 }
 
 const Comment = React.memo((props)=>{
-  let date = moment(props.info.publish_date).utc(true).format('YYYY-MM-DD HH:mm:ss');
+  let date = moment(props.info.publish_date).format('YYYY-MM-DD HH:mm:ss');
   let dateFromNow= moment(date, "YYYYMMDD HHmmss").fromNow();
   let imageBox;
   if(props.info.is_photo === 1){

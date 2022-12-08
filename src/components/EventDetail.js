@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { logHikingTrailDetail, logJoinedMember } from "../Slices/eventSlice";
+import moment from "moment";
+import "moment/locale/zh-hk";
 import {
   MapContainer,
   Marker,
@@ -90,9 +92,11 @@ const EventDetail = () => {
     maxnum_teammate: max,
   } = hikingTrailDetail;
 
-  const date = startTime?.split(":")[0].slice(0, 10);
-  const hour = startTime?.split("T")[1].split(":")[0];
-  const minutes = startTime?.split("T")[1].split(":")[1];
+  const localStartTime = moment(startTime).format("YYYY-MM-DD HH:mm:ss");
+  // const date = localStartTime?.split(":")[0].slice(0, 10);
+  const date = localStartTime?.slice(0, 10);
+  const hour = localStartTime?.split(" ")[1].split(":")[0];
+  const minutes = localStartTime?.split(" ")[1].split(":")[1];
   const time = `${hour}:${minutes}`;
   //   console.log(joinedMember.length, max);
   //   console.log(joinedMember.length > max);
