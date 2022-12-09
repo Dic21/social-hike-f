@@ -32,7 +32,7 @@
 }
 #p01{
     height:100%;
-    background: url('/public/images/p01.jpg');
+    background: url('./Images/p01.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0% 66%;
@@ -40,7 +40,7 @@
 }
 #p02{
     height:100%;
-    background: url('/public/images/p02.jpg');
+    background: url('./Images/p02.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0% 37%;
@@ -48,7 +48,7 @@
 }
 #p03{
     height:100%;
-    background: url('/public/images/p03.jpg');
+    background: url('./Images/p03.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0% 67%;
@@ -56,7 +56,7 @@
 }
 #p04{
     height:100%;
-    background: url('/public/images/p04.jpg');
+    background: url('./Images/p04.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0% 37%;
