@@ -21,6 +21,7 @@ nav{
   height:30px;
   display: flex;
   align-items: center;
+  color: white;
 }
 
 nav>a, .navright>a{
@@ -32,6 +33,34 @@ nav>a, .navright>a{
   margin-left: auto;
   margin-right:15px;
 }
+.dropdown{
+  position: relative;
+  display: inline-block;
+  padding: 10px 0px;
+}
+.dropdown-content{
+  display: none;
+  position: absolute;
+  background-color: rgb(207, 248, 207, 0.8);
+  min-width: 120%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1001;
+  top: 35px;
+}
+.dropdown-content>div{
+  padding: 2px 3px;
+}
+.dropdown-content>div>a{
+  color: black;
+  text-decoration: none;
+}
+.dropdown-content>div>a:hover{
+  text-decoration: underline;
+}
+.dropdown:hover .dropdown-content{
+  display: block;
+}
+
 
 body{
   margin:0;

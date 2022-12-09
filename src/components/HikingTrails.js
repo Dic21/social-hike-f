@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { showList } from "../Slices/placeSlice";
+import { showList,showDetails,showEvents,showComments } from "../Slices/placeSlice";
 import { Link } from "react-router-dom";
 import placeStyle from "../Place.module.css";
 
@@ -14,6 +14,9 @@ const HikingTrails = () => {
   let placeList = [];
   useEffect(() => {
     fetchData();
+    dispatch(showDetails(null));
+    dispatch(showEvents([]));
+    dispatch(showComments([]));
   }, []);
 
   const fetchData = () => {

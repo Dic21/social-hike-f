@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import "moment/locale/zh-hk";
 import { useDispatch, useSelector } from "react-redux";
-import {showDetails,showEvents,setVisibles,showComments,showModal,updateText,updatePicFile} from "../Slices/placeSlice";
+import {showDetails,showEvents,setVisibles,showComments,showModal,updateText} from "../Slices/placeSlice";
 import {Link, useParams,useNavigate} from 'react-router-dom';
 import placeStyle from '../Place.module.css';
 import closePic from "../Images/x-square-fill.svg";
@@ -10,7 +10,7 @@ import userIcon from "../Images/person.svg";
 
 
 const HikingTrailsDetail = () => {
-  const { details, eventList, visibles, cmList, modalDisplay } = useSelector(
+  const { details, eventList, visibles, cmList } = useSelector(
     (state) => {
       return state.place;
     }
@@ -22,7 +22,7 @@ const HikingTrailsDetail = () => {
   useEffect(() => {
     fetchData();
     fetchCmData();
-  }, []);
+  }, [placeId]);
 
   const fetchData = () => {
     fetch(`/place/${placeId}`)
@@ -86,6 +86,7 @@ const HikingTrailsDetail = () => {
   if (!details) {
     return <div>Loading...</div>;
   }
+
   return (
     <div>
       <div className={placeStyle.banner}>
@@ -190,13 +191,13 @@ const Comment = React.memo((props)=>{
 
   return(
     <div className={placeStyle.commentbox}>
-      <div><img src={userIcon}></img> {props.info.publisher}</div>
+      <div><img src={userIcon} alt="icon"></img> {props.info.publisher}</div>
       <div>{dateFromNow}</div>
       <div>{props.info.message}</div>
       <div className={placeStyle.imagebox}>
         {imageBox? imageBox.map((img)=>{
           let path = img.slice(1);
-          return <img key={path} src={path}></img>
+          return <img key={path} src={path} alt="img"></img>
         }):null}
       </div>
     </div>
@@ -204,7 +205,7 @@ const Comment = React.memo((props)=>{
 });
 
 const Modal=(props)=>{
-  const { details, modalDisplay, comment, picFile } = useSelector((state)=>{return state.place});
+  const { details, modalDisplay, comment } = useSelector((state)=>{return state.place});
   const { isLogin } = useSelector((state) => { return state.login});
   const dispatch = useDispatch();
   const [isFile, setIsFile] = useState(false);
@@ -280,7 +281,7 @@ const Modal=(props)=>{
       return (
         <div className={placeStyle.modal}>
           <div className={`${placeStyle["modalcontent"]} ${placeStyle["loginmodal"]}`}>
-            <span onClick={closeModal}><img src={closePic}></img></span>
+            <span onClick={closeModal}><img src={closePic} alt="close"></img></span>
               <div>請先登入</div>
               <Link to="/login">登入</Link>
               <Link to="/register">註冊</Link>
@@ -291,7 +292,7 @@ const Modal=(props)=>{
       return(
         <div className={placeStyle.modal}>
           <div className={placeStyle.modalcontent}>
-            <span onClick={closeModal}><img src={closePic}></img></span>
+            <span onClick={closeModal}><img src={closePic} alt="close"></img></span>
             {!msgSent? cmBox: successBox}
           </div>
         </div>

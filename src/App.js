@@ -29,11 +29,21 @@ function Nav(){
   return(
     <nav>
       <Link to="/">主頁</Link>
+      <span className="dropdown">
+        <span>推薦地點</span>
+        <div className="dropdown-content">
+          <div><Link to="/place/p01">港島徑</Link></div>
+          <div><Link to="/place/p02">鳳凰徑</Link></div>
+          <div><Link to="/place/p03">衛奕信徑</Link></div>
+          <div><Link to="/place/p04">麥理浩徑</Link></div>
+        </div>
+      </span>
+      
       <span className="navright">
         {!isLogin ? <>
           <Link to="/login">
             <span>
-              <img src={loginImage}/> 登入
+              <img src={loginImage} alt="login"/> 登入
             </span>
           </Link>
           <Link to="/register">
