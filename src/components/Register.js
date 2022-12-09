@@ -8,6 +8,7 @@ import {
   inputRegisterPassword,
   logRegisterErrorMessage,
 } from "../Slices/registerSlice";
+import { logIsLogin } from "../Slices/loginSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,8 @@ const Register = () => {
         } else {
           console.log(`Register successfully`);
           dispatch(logRegisterErrorMessage(""));
-          navigate("/place");
+          dispatch(logIsLogin(true));
+          navigate("/");
         }
       });
   };
