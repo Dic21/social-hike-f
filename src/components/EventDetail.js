@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { logHikingTrailDetail, logJoinedMember } from "../Slices/eventSlice";
+import { logCurrentUser } from "../Slices/chatSlice";
 import moment from "moment";
 import "moment/locale/zh-hk";
 import {
@@ -13,11 +14,14 @@ import {
 } from "react-leaflet";
 
 const EventDetail = ({ socket }) => {
-  const [currentUser, setCurrentUser] = useState("");
+  // const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { hikingTrailDetail, joinedMember } = useSelector((state) => {
     return state.event;
+  });
+  const { currentUser } = useSelector((state) => {
+    return state.chat;
   });
 
   const { eventId } = useParams();
@@ -56,10 +60,11 @@ const EventDetail = ({ socket }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setCurrentUser(data.user);
-        console.log(typeof eventID);
+        // setCurrentUser(data.user);
+        dispatch(logCurrentUser(data.user.user));
+        // console.log(typeof eventID);
         console.log(currentUser);
-        console.log("JOIN", eventID);
+        // console.log("JOIN", eventID);
         socket.emit("newUser", {
           currentUser: data.user.user,
           socketID: socket.id,
@@ -81,7 +86,7 @@ const EventDetail = ({ socket }) => {
       },
       method: "POST",
       body: JSON.stringify({
-        eventId: 4,
+        eventId,
       }),
     })
       .then((res) => res.json())

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logCurrentUser } from "../Slices/chatSlice";
 
-const ChatBody = ({ messages, typingStatus, lastMessageRef, socket }) => {
+const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   const navigate = useNavigate();
-  const [joinMesssage, setJoinMessage] = useState("");
 
   const { eventID } = useParams();
 
@@ -13,7 +14,8 @@ const ChatBody = ({ messages, typingStatus, lastMessageRef, socket }) => {
     window.location.reload();
   };
 
-  console.log(messages);
+  const dispatch = useDispatch();
+
   // socket.on("join-room-message", (message) => {
   //   console.log(message);
   // });
@@ -21,28 +23,33 @@ const ChatBody = ({ messages, typingStatus, lastMessageRef, socket }) => {
   //   console.log(message);
   //   setJoinMessage(message);
   // });
-  const [currentUser, setCurrentUser] = useState("");
-  const getInfo = async () => {
-    await fetch(`/get-current-user`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log(data);
-        // console.log(data.user.user);
-        setCurrentUser(data.user.user);
-        console.log(currentUser);
-      });
-  };
+  const { currentUser, messages } = useSelector((state) => {
+    return state.chat;
+  });
+  // const [currentUser, setCurrentUser] = useState("");
+  // const getInfo = async () => {
+  //   await fetch(`/get-current-user`, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //     },
+  //     method: "GET",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // console.log(data);
+  //       // console.log(data.user.user);
+  //       dispatch(logCurrentUser(data.user.user));
+  //       console.log(currentUser);
+  //     });
+  // };
 
-  useEffect(() => {
-    getInfo();
-  }, []);
+  // useEffect(() => {
+  //   getInfo();
+  // }, []);
 
+  console.log(currentUser);
+  console.log(messages);
   return (
     <>
       <header className="chat__mainHeader">

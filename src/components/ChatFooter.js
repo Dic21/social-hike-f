@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import checkPageStatus from "../utils/function";
+import {
+  inputMessages,
+  logCurrentUser,
+  logTypingStatus,
+  logActiveUsers,
+} from "../Slices/chatSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const ChatFooter = ({ socket }) => {
+  const { currentUser, messages, typingStatus } = useSelector((state) => {
+    return state.chat;
+  });
+  const dispatch = useDispatch();
+
   const [message, setMessage] = useState("");
+  // const [currentUser, setCurrentUser] = useState("");
   const { eventID } = useParams();
-  const [currentUser, setCurrentUser] = useState("");
   const getInfo = async () => {
     await fetch(`/get-current-user`, {
       headers: {
@@ -17,28 +29,27 @@ const ChatFooter = ({ socket }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setCurrentUser(data.user.user);
+        dispatch(logCurrentUser(data.user.user));
       });
   };
-
-  useEffect(() => {
-    getInfo();
-  }, []);
 
   const handleTyping = (e) => {
     socket.emit("typing", `${currentUser} is typing`);
   };
 
+  const messageDetail = {
+    text: message,
+    name: currentUser,
+    id: `${socket.id}${Math.random()}`,
+    socketID: socket.id,
+    room: eventID,
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim()) {
-      socket.emit("message", {
-        text: message,
-        name: currentUser,
-        id: `${socket.id}${Math.random()}`,
-        socketID: socket.id,
-        room: eventID,
-      });
+      dispatch(inputMessages(messageDetail));
+      socket.emit("message", messageDetail);
       checkPageStatus(message, currentUser);
       setMessage("");
     }
@@ -51,7 +62,10 @@ const ChatFooter = ({ socket }) => {
           placeholder="Write message"
           className="message"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onFocus={getInfo}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
           onKeyDown={handleTyping}
         />
         <button className="sendBtn">SEND</button>

@@ -3,19 +3,31 @@ import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
 import "../index.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  inputMessages,
+  logCurrentUser,
+  logTypingStatus,
+  logActiveUsers,
+} from "../Slices/chatSlice";
 
 const ChatPage = ({ socket }) => {
-  const [messages, setMessages] = useState([]);
-  const [typingStatus, setTypingStatus] = useState("");
+  const { currentUser, messages, typingStatus } = useSelector((state) => {
+    return state.chat;
+  });
+  // const [messages, setMessages] = useState([]);
+  // const [typingStatus, setTypingStatus] = useState("");
   const lastMessageRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socket.on("messageResponse", (data) => {
       console.log("messageResponse", data);
-      setMessages((lastMessage) => {
-        return [...lastMessage, data];
-      });
-      console.log(messages);
+      // console.log(data);
+      dispatch(inputMessages(data));
+      // setMessages((lastMessage) => {
+      //   return [...lastMessage, data];
+      // });
     });
   }, []);
 
@@ -26,9 +38,10 @@ const ChatPage = ({ socket }) => {
 
   useEffect(() => {
     socket.on("typingResponse", (data) => {
-      setTypingStatus(data);
+      dispatch(logTypingStatus(data));
+      // setTypingStatus(data);
       setTimeout(() => {
-        setTypingStatus("");
+        dispatch(logTypingStatus(""));
       }, 2000);
     });
   }, [socket]);

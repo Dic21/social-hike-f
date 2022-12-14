@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
 
+import { logCurrentUser } from "./Slices/chatSlice";
+
 const socket = socketIO.connect();
 
 function Protected(props) {
@@ -30,9 +32,12 @@ function IsLoggedIn(props) {
 }
 
 function Nav() {
-  const [currentUser, setCurrentUser] = useState("");
+  // const [currentUser, setCurrentUser] = useState("");
   const { isLogin } = useSelector((state) => {
     return state.login;
+  });
+  const { currentUser } = useSelector((state) => {
+    return state.chat;
   });
 
   const dispatch = useDispatch();
@@ -40,7 +45,7 @@ function Nav() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(logIsLogin(false));
-    setCurrentUser("");
+    dispatch(logCurrentUser(""));
   };
 
   const getCurrentUser = async () => {
@@ -56,8 +61,8 @@ function Nav() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setCurrentUser(data.user.user);
+        // console.log(data);
+        dispatch(logCurrentUser(data.user.user));
       });
     // console.log(id);
     // console.log(currentUser);
