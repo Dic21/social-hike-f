@@ -11,7 +11,9 @@ import ChatPage from "./Components/ChatPage";
 import socketIO from "socket.io-client";
 import loginImage from "./Images/login.svg";
 import Home from "./Components/Home";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { logIsLogin } from "./Slices/loginSlice";
+import { useDispatch } from "react-redux";
 
 const socket = socketIO.connect();
 
@@ -28,9 +30,40 @@ function IsLoggedIn(props) {
 }
 
 function Nav() {
+  const [currentUser, setCurrentUser] = useState("");
   const { isLogin } = useSelector((state) => {
     return state.login;
   });
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logIsLogin(false));
+    setCurrentUser("");
+  };
+
+  const getCurrentUser = async () => {
+    await fetch(`/get-current-user`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      method: "GET",
+      // body: JSON.stringify({
+      //   eventId: 4,
+      // }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setCurrentUser(data.user.user);
+      });
+    // console.log(id);
+    // console.log(currentUser);
+  };
+
+  getCurrentUser();
 
   return (
     <nav>
@@ -67,7 +100,10 @@ function Nav() {
           </>
         ) : (
           <>
-            <span>歡迎回來</span>
+            <span>歡迎回來 {currentUser}</span>
+            <Link to="/login">
+              <span onClick={handleLogout}>登出</span>
+            </Link>
           </>
         )}
       </span>
