@@ -7,7 +7,13 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import HikingTrails from "./Components/HikingTrails";
 import HikingTrailsDetail from "./Components/HikingTrailsDetail";
+import ChatPage from "./Components/ChatPage";
+import socketIO from "socket.io-client";
 import loginImage from "./Images/login.svg";
+import Home from "./Components/Home";
+import { useEffect } from "react";
+
+const socket = socketIO.connect();
 
 function Protected(props) {
   return props.loggedIn ? (
@@ -17,56 +23,84 @@ function Protected(props) {
   );
 }
 
-function IsLoggedIn(props){
-  return (
-    props.loggedIn ? <Navigate to="/" replace={true}/> : props.children
-  )
+function IsLoggedIn(props) {
+  return props.loggedIn ? <Navigate to="/" replace={true} /> : props.children;
 }
 
-function Nav(){
-  const { isLogin } = useSelector((state) => { return state.login});
+function Nav() {
+  const { isLogin } = useSelector((state) => {
+    return state.login;
+  });
 
-  return(
+  return (
     <nav>
       <Link to="/">主頁</Link>
       <span className="dropdown">
         <span>推薦地點</span>
         <div className="dropdown-content">
-          <div><Link to="/place/p01">港島徑</Link></div>
-          <div><Link to="/place/p02">鳳凰徑</Link></div>
-          <div><Link to="/place/p03">衛奕信徑</Link></div>
-          <div><Link to="/place/p04">麥理浩徑</Link></div>
+          <div>
+            <Link to="/place/p01">港島徑</Link>
+          </div>
+          <div>
+            <Link to="/place/p02">鳳凰徑</Link>
+          </div>
+          <div>
+            <Link to="/place/p03">衛奕信徑</Link>
+          </div>
+          <div>
+            <Link to="/place/p04">麥理浩徑</Link>
+          </div>
         </div>
       </span>
-      
+
       <span className="navright">
-        {!isLogin ? <>
-          <Link to="/login">
-            <span>
-              <img src={loginImage} alt="login"/> 登入
-            </span>
-          </Link>
-          <Link to="/register">
-            <span> 
-              註冊
-            </span>
-          </Link>
-        </>: <span>歡迎回來</span>}
+        {!isLogin ? (
+          <>
+            <Link to="/login">
+              <span>
+                <img src={loginImage} alt="login" /> 登入
+              </span>
+            </Link>
+            <Link to="/register">
+              <span>註冊</span>
+            </Link>
+          </>
+        ) : (
+          <>
+            <span>歡迎回來</span>
+          </>
+        )}
       </span>
     </nav>
-  )
+  );
 }
 
 function App() {
-  const { isLogin } = useSelector((state) => { return state.login});
+  const { isLogin } = useSelector((state) => {
+    return state.login;
+  });
 
   return (
     <div className="App">
-      <Nav/>
+      <Nav />
       <Routes>
-        <Route path="/" element={<HikingTrails />}/>
-        <Route path="/login" element={<IsLoggedIn loggedIn={isLogin}><Login/></IsLoggedIn>} />
-        <Route path="/register" element={<IsLoggedIn loggedIn={isLogin}><Register/></IsLoggedIn>} />
+        <Route path="/" element={<HikingTrails />} />
+        <Route
+          path="/login"
+          element={
+            <IsLoggedIn loggedIn={isLogin}>
+              <Login />
+            </IsLoggedIn>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <IsLoggedIn loggedIn={isLogin}>
+              <Register />
+            </IsLoggedIn>
+          }
+        />
         <Route
           path="/event"
           element={
@@ -75,9 +109,18 @@ function App() {
             </Protected>
           }
         ></Route>
-        <Route path="/event/:eventId/detail" element={<EventDetail />} />
+        <Route
+          path="/event/:eventId/detail"
+          element={<EventDetail socket={socket} />}
+        />
 
         <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
+        <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
+        {/* <Route path="/chat/home" element={<Home socket={socket} />}></Route> */}
+        <Route
+          path="/chat/:eventID"
+          element={<ChatPage socket={socket} />}
+        ></Route>
       </Routes>
       {/* <Routes>
         <Route path="/login" element={<Login/>}></Route>

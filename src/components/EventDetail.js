@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { logHikingTrailDetail, logJoinedMember } from "../Slices/eventSlice";
 import moment from "moment";
 import "moment/locale/zh-hk";
@@ -12,28 +12,18 @@ import {
   Polyline,
 } from "react-leaflet";
 
-const EventDetail = () => {
+const EventDetail = ({ socket }) => {
+  const [currentUser, setCurrentUser] = useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    // eventName,
-    // maxMember,
-    // startTime,
-    // startPoint,
-    // endPoint,
-    // hikingTrailID,
-    // description,
-    // hikingTime,
-    // difficulty,
-    hikingTrailDetail,
-    joinedMember,
-  } = useSelector((state) => {
+  const { hikingTrailDetail, joinedMember } = useSelector((state) => {
     return state.event;
   });
 
   const { eventId } = useParams();
   const getEventDetail = () => {
     // console.log(hikingTrailID);
-    console.log(`hello`);
+    // console.log(`hello`);
 
     fetch(`/event/${eventId}/detail`, {
       headers: {
@@ -44,11 +34,42 @@ const EventDetail = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
+          console.log(data);
           dispatch(logHikingTrailDetail(data.eventInfo[0]));
         } else {
           console.log("Cannot get data!");
         }
       });
+  };
+
+  const handleJoinEvent = async () => {
+    await fetch(`/get-current-user`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      method: "GET",
+      // body: JSON.stringify({
+      //   eventId: 4,
+      // }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setCurrentUser(data.user);
+        console.log(typeof eventID);
+        console.log(currentUser);
+        console.log("JOIN", eventID);
+        socket.emit("newUser", {
+          currentUser: data.user.user,
+          socketID: socket.id,
+        });
+        socket.emit("join", eventID);
+      });
+    // console.log(id);
+    // console.log(currentUser);
+
+    navigate(`/chat/${eventID}`);
   };
 
   const getEnrolledMember = () => {
@@ -77,11 +98,12 @@ const EventDetail = () => {
 
   useEffect(() => {
     getEventDetail();
-    // getEnrolledMember();
+    getEnrolledMember();
   }, []);
 
   const {
     event_name: event,
+    id: eventID,
     host,
     place_id,
     difficulty,
@@ -151,7 +173,10 @@ const EventDetail = () => {
       <h5>難度:{difficulty}</h5>
       <h5>最多人數: {max}</h5>
 
-      <button disabled={joinedMember.length > max ? true : false}>
+      <button
+        onClick={handleJoinEvent}
+        disabled={joinedMember.length > max ? true : false}
+      >
         加入活動
       </button>
       {joinedMember.length > max ? <p>抱歉，此活動已滿</p> : null}

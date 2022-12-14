@@ -38,7 +38,7 @@ const Register = () => {
           console.log(`Register successfully`);
           dispatch(logRegisterErrorMessage(""));
           dispatch(logIsLogin(true));
-          navigate("/");
+          navigate("/login");
         }
       });
   };
