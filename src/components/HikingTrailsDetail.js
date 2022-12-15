@@ -255,6 +255,7 @@ const Modal=(props)=>{
         setMsgSent(true);
         setTimeout(()=>{
           dispatch(showModal(false));
+          setMsgSent(false);
         }, 3000);
         dispatch(updateText(""));
         props.cmfetch();
@@ -283,8 +284,8 @@ const Modal=(props)=>{
           <div className={`${placeStyle["modalcontent"]} ${placeStyle["loginmodal"]}`}>
             <span onClick={closeModal}><img src={closePic} alt="close"></img></span>
               <div>請先登入</div>
-              <Link to="/login">登入</Link>
-              <Link to="/register">註冊</Link>
+              <Link to="/login" onClick={closeModal}>登入</Link>
+              <Link to="/register" onClick={closeModal}>註冊</Link>
           </div>
         </div>
       )

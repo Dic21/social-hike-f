@@ -102,6 +102,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 5px;
+    margin-top: 5px;
 }
 .event-headline-right{
     margin-left: auto;
@@ -243,5 +244,11 @@ h5{
     }
     .right{
         margin: 15px 0 0 0;
+    }
+    .modalcontent{
+        width:80%;
+    }
+    #userinputbox{
+        width:100%;
     }
 }
