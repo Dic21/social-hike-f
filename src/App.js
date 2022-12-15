@@ -14,8 +14,7 @@ import Home from "./Components/Home";
 import { useEffect, useState } from "react";
 import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
-
-import { logCurrentUser } from "./Slices/chatSlice";
+import MemberPage from "./Components/MemberPage";
 
 const socket = socketIO.connect();
 
@@ -32,12 +31,9 @@ function IsLoggedIn(props) {
 }
 
 function Nav() {
-  // const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   const { isLogin } = useSelector((state) => {
     return state.login;
-  });
-  const { currentUser } = useSelector((state) => {
-    return state.chat;
   });
 
   const dispatch = useDispatch();
@@ -45,7 +41,7 @@ function Nav() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(logIsLogin(false));
-    dispatch(logCurrentUser(""));
+    setCurrentUser("");
   };
 
   const getCurrentUser = async () => {
@@ -62,7 +58,7 @@ function Nav() {
       .then((res) => res.json())
       .then((data) => {
         // console.log(data);
-        dispatch(logCurrentUser(data.user.user));
+        setCurrentUser(data.user.user);
       });
     // console.log(id);
     // console.log(currentUser);
@@ -126,14 +122,16 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<HikingTrails />} />
+
         <Route
           path="/login"
           element={
             <IsLoggedIn loggedIn={isLogin}>
               <Login />
             </IsLoggedIn>
-          }
-        />
+          } />
+
+
         <Route
           path="/register"
           element={
@@ -142,6 +140,7 @@ function App() {
             </IsLoggedIn>
           }
         />
+
         <Route
           path="/event"
           element={
@@ -149,7 +148,26 @@ function App() {
               <Event />
             </Protected>
           }
-        ></Route>
+        />
+
+        <Route
+          path="/member"
+          element={
+            <Protected loggedIn={isLogin}>
+              <MemberPage />
+            </Protected>
+          }
+        />
+
+        <Route
+          path="/home"
+          element={
+              <Home />
+          }
+        />
+
+
+
         <Route
           path="/event/:eventId/detail"
           element={<EventDetail socket={socket} />}
@@ -163,6 +181,8 @@ function App() {
           element={<ChatPage socket={socket} />}
         ></Route>
       </Routes>
+
+
       {/* <Routes>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/create-event" element={
