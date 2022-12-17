@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ChatBar = ({ socket }) => {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  const { eventId } = useParams();
+
+  const handleClick = () => {
+    navigate(`/event/${eventId}/joiner-location`);
+  };
 
   useEffect(() => {
     socket.on("newUserResponse", (data) => setUsers(data));
@@ -20,6 +27,7 @@ const ChatBar = ({ socket }) => {
           ))}
         </div>
       </div>
+      <button onClick={handleClick}>Show Participants location</button>
     </div>
   );
 };

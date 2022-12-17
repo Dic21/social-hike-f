@@ -16,6 +16,7 @@ import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
 
 import { logCurrentUser } from "./Slices/chatSlice";
+import GetLocation from "./Components/GetLocation";
 
 const socket = socketIO.connect();
 
@@ -159,9 +160,13 @@ function App() {
         <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
         {/* <Route path="/chat/home" element={<Home socket={socket} />}></Route> */}
         <Route
-          path="/chat/:eventID"
+          path="/chat/:eventId"
           element={<ChatPage socket={socket} />}
         ></Route>
+        <Route
+          path="/event/:eventId/joiner-location"
+          element={<GetLocation />}
+        />
       </Routes>
       {/* <Routes>
         <Route path="/login" element={<Login/>}></Route>

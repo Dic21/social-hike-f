@@ -71,8 +71,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #f9f5eb;
+}
+.walkie__btn {
+  padding: 7px;
+  width: 120px;
+  border: none;
+  outline: none;
+  background-color: violet;
+  cursor: pointer;
+  color: #eae3d2;
 }
 .leaveChat__btn {
   padding: 10px;
