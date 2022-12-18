@@ -1,6 +1,7 @@
 import "./App.css";
 import { Route, Routes, Navigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 import Event from "./Components/Event";
 import EventDetail from "./Components/EventDetail";
 import Login from "./Components/Login";
@@ -8,13 +9,15 @@ import Register from "./Components/Register";
 import HikingTrails from "./Components/HikingTrails";
 import HikingTrailsDetail from "./Components/HikingTrailsDetail";
 import ChatPage from "./Components/ChatPage";
+import MemberPage from "./Components/MemberPage";
+
 import socketIO from "socket.io-client";
 import loginImage from "./Images/login.svg";
 import Home from "./Components/Home";
 import { useEffect, useState } from "react";
 import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
-import MemberPage from "./Components/MemberPage";
+
 
 const socket = socketIO.connect();
 
@@ -101,7 +104,7 @@ function Nav() {
           </>
         ) : (
           <>
-             <span>歡迎回來 {currentUser}</span>
+             <span>歡迎回來,{currentUser}</span>
             <Link to="/member">
               <span>member</span>
             </Link>
