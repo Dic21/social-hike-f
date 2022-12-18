@@ -39,6 +39,7 @@ h1,.navigateToRegister{
     font-weight: 600;
     border-style: none;
     outline-style: none;
+    -webkit-text-security: disc !important;
 }
 .inputWrapper{
     display: flex;
