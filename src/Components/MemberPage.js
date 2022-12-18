@@ -65,7 +65,7 @@ function MemberPage(){
       <div>joined-actitiy{
         HistoryList ? HistoryList.map((item) => {
           return (
-            <div>
+            <div key={item.event_id}>
               <li>event-name: {item.event_name}  event-Id: {item.event_id}
                 <button onClick={()=>{handleOnClick(item.event_id)}}>Delete</button>
               </li>
