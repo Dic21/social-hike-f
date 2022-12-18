@@ -101,7 +101,11 @@ function Nav() {
           </>
         ) : (
           <>
-            <span>歡迎回來 {currentUser}</span>
+             <span>歡迎回來 {currentUser}</span>
+            <Link to="/member">
+              <span>member</span>
+            </Link>
+
             <Link to="/login">
               <span onClick={handleLogout}>登出</span>
             </Link>
