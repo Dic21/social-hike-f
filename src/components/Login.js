@@ -105,7 +105,7 @@ const Login = () => {
           </button>
         </div>
         <div className={PageStyle.navigateToRegister}>
-        Do not have an account? <Link to="/register">Register Here</Link>
+        沒有會員帳戶?<Link to="/register">立即建立你的帳戶</Link>
         </div>
       </div>
     </div>

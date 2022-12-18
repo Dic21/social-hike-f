@@ -99,7 +99,7 @@ const Register = () => {
           </button>
         </div>
         <div className={PageStyle.navigateToRegister}>
-          Already an account? <Link to="/login">Login Here</Link>
+        已經有會員帳戶? <Link to="/login"> 按此登入你的帳戶</Link>
         </div>
       </div>
     </div>
