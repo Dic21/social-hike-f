@@ -77,7 +77,8 @@ const Register = () => {
           <div>
           
             <input
-              className={PageStyle.input}
+              className={PageStyle.password}
+
               type="password"
               placeholder="Password"
               onChange={(e) => {

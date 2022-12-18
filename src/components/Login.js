@@ -76,7 +76,7 @@ const Login = () => {
             <input
               className={PageStyle.input}
               type="text"
-              placeholder="ID"
+              placeholder="username"
               onChange={(e) => {
                  dispatch(inputLoginID(e.target.value));
               }}
@@ -84,9 +84,9 @@ const Login = () => {
           </div>
           <div>
             <input
-              className={PageStyle.input}
+              className={PageStyle.password}
               type="text"
-              placeholder="username"
+              placeholder="password"
               onChange={(e) => {
                 dispatch(inputLoginPassword(e.target.value));
               }}
