@@ -79,8 +79,8 @@ const GetLocation = () => {
           );
         })}
       </MapContainer>
-      {positionData.length === 0 ? <p>Finding your location...</p> : null}
-      <button onClick={handleClick}>Back to chat</button>
+      {positionData.length === 0 ? <p>正在尋找你的位置...</p> : null}
+      <button onClick={handleClick}>返回對話</button>
     </div>
   );
 };
