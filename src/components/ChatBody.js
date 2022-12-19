@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logCurrentUser } from "../Slices/chatSlice";
+import { logHikingTrailDetail } from "../Slices/eventSlice";
 
 const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   const navigate = useNavigate();
 
-  const { eventID } = useParams();
+  const { eventId } = useParams();
 
   const handleLeaveChat = () => {
-    navigate(`/event/${eventID}/detail`); //TODO
+    navigate(`/event/${eventId}/detail`); //TODO
 
     window.location.reload();
   };
@@ -48,12 +49,60 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   //   getInfo();
   // }, []);
 
+  const { hikingTrailDetail } = useSelector((state) => {
+    return state.event;
+  });
+  const getEventDetail = () => {
+    // console.log(hikingTrailID);
+    // console.log(`hello`);
+
+    fetch(`/event/${eventId}/detail`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          console.log(data);
+          dispatch(logHikingTrailDetail(data.eventInfo[0]));
+        } else {
+          console.log("Cannot get data!");
+        }
+      });
+  };
   console.log(currentUser);
   console.log(messages);
+  console.log(hikingTrailDetail.host);
+
+  useEffect(() => {
+    getEventDetail();
+  }, []);
   return (
     <>
       <header className="chat__mainHeader">
         <p>Hangout with Colleagues</p>
+        {currentUser === hikingTrailDetail.host ? (
+          <div>
+            <button className="walkie__btn" onClick={handleLeaveChat}>
+              Start Stream
+            </button>
+            <button className="walkie__btn" onClick={handleLeaveChat}>
+              Mute
+            </button>
+            <button className="walkie__btn" onClick={handleLeaveChat}>
+              Unmute
+            </button>
+          </div>
+        ) : (
+          <div>
+            {/* <audio autoplay id="video"></audio> */}
+            <button className="walkie__btn" onClick={handleLeaveChat}>
+              View Stream
+            </button>
+          </div>
+        )}
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
           LEAVE CHAT
         </button>

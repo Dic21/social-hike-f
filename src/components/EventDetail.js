@@ -26,9 +26,6 @@ const EventDetail = ({ socket }) => {
 
   const { eventId } = useParams();
   const getEventDetail = () => {
-    // console.log(hikingTrailID);
-    // console.log(`hello`);
-
     fetch(`/event/${eventId}/detail`, {
       headers: {
         "Content-Type": "application/json",
@@ -46,16 +43,13 @@ const EventDetail = ({ socket }) => {
       });
   };
 
-  const handleJoinEvent = async () => {
-    await fetch(`/get-current-user`, {
+  const addUserToChatroom = () => {
+    fetch(`/get-current-user`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       method: "GET",
-      // body: JSON.stringify({
-      //   eventId: 4,
-      // }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -71,15 +65,33 @@ const EventDetail = ({ socket }) => {
         });
         socket.emit("join", eventID);
       });
+  };
+
+  const addUserToEvent = () => {
+    fetch(`/event/${eventId}/member`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        alert(data.message);
+      });
+  };
+  const handleJoinEvent = async () => {
+    addUserToChatroom();
+    addUserToEvent();
+
     // console.log(id);
     // console.log(currentUser);
 
-    navigate(`/chat/${eventID}`);
+    navigate(`/chat/${eventId}`);
   };
 
   const getEnrolledMember = () => {
-    // console.log(hikingTrailID);
-
     fetch(`/join-record`, {
       headers: {
         "Content-Type": "application/json",
@@ -133,19 +145,6 @@ const EventDetail = ({ socket }) => {
     [end?.x, end?.y],
   ];
 
-  let defaultMapPosition;
-
-  //   if (place_id === "p01") {
-  //     defaultMapPosition = [22.27463, 114.14907];
-  //   } else if (place_id === "p02") {
-  //     defaultMapPosition = [22.26405, 113.99998];
-  //   } else if (place_id === "p03") {
-  //     defaultMapPosition = [22.22709, 114.20714];
-  //   } else if (place_id === "p04") {
-  //     defaultMapPosition = [22.39651, 114.32681];
-  //   } else {
-  //     defaultMapPosition = [22.3128786, 114.2115803];
-  //   }
   return (
     <div style={{ backgroundColor: "orangered", width: "500px" }}>
       <h1>{event}</h1>
@@ -172,19 +171,20 @@ const EventDetail = ({ socket }) => {
         <div>Cannot load map! Insufficient Data</div>
       )}
 
+      <h5>主辨人:{host}</h5>
       <h5>日期:{date}</h5>
       <h5>時間:{time}</h5>
-
       <h5>難度:{difficulty}</h5>
+      <h5>詳細資料:{description}</h5>
       <h5>最多人數: {max}</h5>
 
       <button
         onClick={handleJoinEvent}
-        disabled={joinedMember.length > max ? true : false}
+        disabled={joinedMember.length >= max ? true : false}
       >
         加入活動
       </button>
-      {joinedMember.length > max ? <p>抱歉，此活動已滿</p> : null}
+      {joinedMember.length >= max ? <p>抱歉，此活動已滿</p> : null}
     </div>
   );
 };
