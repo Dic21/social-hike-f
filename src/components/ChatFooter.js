@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import checkPageStatus from "../utils/function";
+import checkPageStatus from "../utils/notification";
 import {
   inputMessages,
   logCurrentUser,
