@@ -1,0 +1,94 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  height: 94vh;
+  align-items: center;
+}
+.titlewrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login {
+  background: hsl(144, 22%, 35%);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  justify-content: center;
+}
+.title {
+  color: #fff;
+}
+
+h1,
+.navigateToRegister {
+  color: white;
+  margin: 15px;
+}
+
+.input {
+  height: 50px;
+  width: 200px;
+
+  margin: 10px 0;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  border-radius: 8px;
+  padding: 0 30px;
+  font-weight: 600;
+  border-style: none;
+  outline-style: none;
+}
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.password {
+  height: 50px;
+  width: 200px;
+
+  margin: 10px 0;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  border-radius: 8px;
+  padding: 0 30px;
+  font-weight: 600;
+  border-style: none;
+  outline-style: none;
+  -webkit-text-security: disc !important;
+}
+
+.error {
+  color: red;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.btn {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+  height: 47px;
+  width: 90px;
+  border-radius: 25px;
+  background: hsl(148, 26%, 48%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+  margin: 5px 6px 7px 201px;
+  border-style: none;
+}
+
+.navigateToRegister {
+  margin: 20px;
+  text-align: center;
+}

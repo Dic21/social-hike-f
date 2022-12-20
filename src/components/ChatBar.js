@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import chatStyle from "../Chat.module.css";
+import GetLocation from "../Components/GetLocation";
 
 const ChatBar = ({ socket }) => {
   const [users, setUsers] = useState([]);
@@ -17,8 +19,8 @@ const ChatBar = ({ socket }) => {
   console.log(users);
 
   return (
-    <div className="chat__sidebar">
-      <h2>Open Chat</h2>
+    <div className={chatStyle.chat__sidebar}>
+      <h2 style={{ color: "red", fontSize: "50px" }}>小行書</h2>
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
@@ -27,7 +29,8 @@ const ChatBar = ({ socket }) => {
           ))}
         </div>
       </div>
-      <button onClick={handleClick}>Show Participants location</button>
+      <GetLocation />
+      {/* <button onClick={handleClick}>顥示用戶實時位置</button> */}
     </div>
   );
 };

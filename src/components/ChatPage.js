@@ -10,6 +10,7 @@ import {
   logTypingStatus,
   logActiveUsers,
 } from "../Slices/chatSlice";
+import chatStyle from "../Chat.module.css";
 
 const ChatPage = ({ socket }) => {
   const { currentUser, messages, typingStatus } = useSelector((state) => {
@@ -47,16 +48,18 @@ const ChatPage = ({ socket }) => {
   }, [socket]);
 
   return (
-    <div className="chat">
-      <ChatBar socket={socket} />
-      <div className="chat__main">
-        <ChatBody
-          messages={messages}
-          typingStatus={typingStatus}
-          lastMessageRef={lastMessageRef}
-          socket={socket}
-        />
-        <ChatFooter socket={socket} />
+    <div>
+      <div className={chatStyle.chat}>
+        <ChatBar socket={socket} />
+        <div className={chatStyle.chat__main}>
+          <ChatBody
+            messages={messages}
+            typingStatus={typingStatus}
+            lastMessageRef={lastMessageRef}
+            socket={socket}
+          />
+          <ChatFooter socket={socket} />
+        </div>
       </div>
     </div>
   );
