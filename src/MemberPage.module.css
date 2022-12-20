@@ -1,0 +1,49 @@
+* {
+    border: 0;
+}
+
+.pagetitle {
+    font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    font-size: 60px;
+    margin-left: 15px;
+}
+
+.subtitle {
+    font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    padding-bottom: 150px;
+    margin-left: 15px;
+}
+
+.whitebox {
+    background-color: #ffffff;
+    opacity: 0.8;
+    border-radius: 10px;
+    padding: 18px 30px 20px;
+    margin-bottom: 80px;
+    display: block;
+    height: 200px;
+    width: 625px;
+}
+
+.whiteboxtitle {
+    padding: 0px 0px 21px 0px;
+    font-size: 30px;
+}
+
+.detailbox {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.activityBox {
+    display: flex;
+    justify-content: space-evenly;
+}
