@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logCurrentUser } from "../Slices/chatSlice";
 import { logHikingTrailDetail } from "../Slices/eventSlice";
 import chatStyle from "../Chat.module.css";
+import axios from 'axios';
 
 const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
+  const [talk, setTalk] = useState(false);
   const navigate = useNavigate();
 
   const { eventId } = useParams();
@@ -17,7 +19,7 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   };
 
   const dispatch = useDispatch();
-
+  const WalkieBtn = useRef();
   // socket.on("join-room-message", (message) => {
   //   console.log(message);
   // });
@@ -56,6 +58,58 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   console.log(messages);
   console.log(hikingTrailDetail.host);
 
+
+  const handleStartTalk =()=>{
+    init();
+    setTalk(true);
+  }
+  let stream;
+  const muteStream=()=> {
+    stream.getAudioTracks()[0].enabled = false;
+  }
+
+  const unmuteStream=()=> {
+    stream.getAudioTracks()[0].enabled = true;
+  }
+
+  const init = async()=> {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    // document.getElementById("video").srcObject = stream;
+    const peer = createPeer();
+    stream.getTracks().forEach(track => {
+      peer.addTrack(track, stream);
+    });
+  }
+
+
+  const createPeer=()=>{
+    const peer = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: "stun:stun.stunprotocol.org"
+        }
+      ]
+    });
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
+
+    return peer;
+  }
+
+  const handleNegotiationNeededEvent = async(peer)=>{
+    const offer = await peer.createOffer();
+    console.log(offer);
+    await peer.setLocalDescription(offer);
+    const payload = {
+      sdp: peer.localDescription
+    };
+    console.log(payload);
+
+    const { data } = await axios.post('/walkie/broadcast', payload);
+    const desc = new RTCSessionDescription(data.sdp);
+    peer.setRemoteDescription(desc).catch(e => console.log(e));
+  }
+
+
   useEffect(() => {
     getEventDetail();
   }, []);
@@ -65,15 +119,12 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
         <p>{hikingTrailDetail.event_name}行山團</p>
         {currentUser === hikingTrailDetail.host ? (
           <div>
-            <button className={chatStyle.walkie__btn} onClick={handleLeaveChat}>
-              開始實時對話
+            <button className={chatStyle.walkie__btn} onClick={handleStartTalk} ref={WalkieBtn}>
+              開啟實時對話
             </button>
-            <button className={chatStyle.walkie__btn} onClick={handleLeaveChat}>
-              靜音
-            </button>
-            <button className={chatStyle.walkie__btn} onClick={handleLeaveChat}>
-              取消靜音
-            </button>
+            {talk? <button className={chatStyle.walkie__btn} id={chatStyle.pressTalk} onMouseDown={unmuteStream} onMouseUp={muteStream}>
+              按住以說話
+            </button>: null}
           </div>
         ) : (
           <div>
@@ -117,5 +168,8 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
     </>
   );
 };
+
+
+
 
 export default ChatBody;

@@ -169,3 +169,7 @@
   font-size: 13px;
   font-style: italic;
 }
+#pressTalk:active {
+  background-color: #d1512d;
+  box-shadow: 5px 1px 1px black;
+}
