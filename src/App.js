@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
 
+import { logCurrentUser } from "./Slices/chatSlice";
 import GetLocation from "./Components/GetLocation";
 
 const socket = socketIO.connect();
@@ -55,9 +56,6 @@ function Nav() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       method: "GET",
-      // body: JSON.stringify({
-      //   eventId: 4,
-      // }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -67,8 +65,9 @@ function Nav() {
     // console.log(id);
     // console.log(currentUser);
   };
-
-  getCurrentUser();
+  if (localStorage.getItem("token")) {
+    getCurrentUser();
+  }
 
   return (
     <nav>

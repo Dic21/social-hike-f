@@ -2,21 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
-import "../index.css";
+// import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  inputMessages,
-  logCurrentUser,
-  logTypingStatus,
-  logActiveUsers,
-} from "../Slices/chatSlice";
+import { inputMessages, logTypingStatus } from "../Slices/chatSlice";
+import chatStyle from "../Chat.module.css";
 
 const ChatPage = ({ socket }) => {
   const { currentUser, messages, typingStatus } = useSelector((state) => {
     return state.chat;
   });
-  // const [messages, setMessages] = useState([]);
-  // const [typingStatus, setTypingStatus] = useState("");
+
   const lastMessageRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -25,9 +20,6 @@ const ChatPage = ({ socket }) => {
       console.log("messageResponse", data);
       // console.log(data);
       dispatch(inputMessages(data));
-      // setMessages((lastMessage) => {
-      //   return [...lastMessage, data];
-      // });
     });
   }, []);
 
@@ -47,9 +39,9 @@ const ChatPage = ({ socket }) => {
   }, [socket]);
 
   return (
-    <div className="chat">
+    <div className={chatStyle.chat}>
       <ChatBar socket={socket} />
-      <div className="chat__main">
+      <div className={chatStyle.chat__main}>
         <ChatBody
           messages={messages}
           typingStatus={typingStatus}

@@ -5,13 +5,7 @@ import { logHikingTrailDetail, logJoinedMember } from "../Slices/eventSlice";
 import { logCurrentUser } from "../Slices/chatSlice";
 import moment from "moment";
 import "moment/locale/zh-hk";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  Polyline,
-} from "react-leaflet";
+import { MapContainer, Marker, TileLayer, Polyline } from "react-leaflet";
 
 const EventDetail = ({ socket }) => {
   // const [currentUser, setCurrentUser] = useState("");
@@ -63,7 +57,7 @@ const EventDetail = ({ socket }) => {
           currentUser: data.user.user,
           socketID: socket.id,
         });
-        socket.emit("join", eventID);
+        socket.emit("join", eventId);
       });
   };
 
