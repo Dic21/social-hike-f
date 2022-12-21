@@ -67,18 +67,17 @@ const Login = () => {
     <div className={PageStyle.wrapper}>
       <div className={PageStyle.login}>
         <div className={PageStyle.titlewrapper}>
-          <h1 className={PageStyle.title}>Member Login</h1>
+          <h1 className={PageStyle.title}>會員登入</h1>
         </div>
 
         <div className={PageStyle.inputWrapper}>
           <div>
-           
             <input
               className={PageStyle.input}
               type="text"
-              placeholder="username"
+              placeholder="用戶名稱"
               onChange={(e) => {
-                 dispatch(inputLoginID(e.target.value));
+                dispatch(inputLoginID(e.target.value));
               }}
             ></input>
           </div>
@@ -86,7 +85,7 @@ const Login = () => {
             <input
               className={PageStyle.password}
               type="password"
-              placeholder="password"
+              placeholder="密碼"
               onChange={(e) => {
                 dispatch(inputLoginPassword(e.target.value));
               }}
@@ -101,15 +100,14 @@ const Login = () => {
         </div>
         <div>
           <button onClick={login} className={PageStyle.btn}>
-          Login
+            登入
           </button>
         </div>
         <div className={PageStyle.navigateToRegister}>
-        沒有會員帳戶?<Link to="/register">立即建立你的帳戶</Link>
+          沒有會員帳戶?<Link to="/register">立即建立你的帳戶</Link>
         </div>
       </div>
     </div>
-
   );
 
   //     {/* <GoogleLogin

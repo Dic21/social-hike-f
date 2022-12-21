@@ -1,74 +1,94 @@
 * {
-    border: 0;
+  border: 0;
 }
 
 .pagetitle {
-    font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 600;
-    font-size: 60px;
-    margin-left: 15px;
+  font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 60px;
+  margin-left: 15px;
 }
 
 .subtitle {
-    font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    padding-bottom: 150px;
-    margin-left: 15px;
+  font-family: "Gotham Cond A", "Gotham Cond B", "Arial Narrow Bold",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  padding-bottom: 150px;
+  margin-left: 15px;
 }
 
 .whitebox {
-    background-color: #ffffff;
-    opacity: 0.8;
-    border-radius: 10px;
-    padding: 18px 30px 20px;
-    margin-bottom: 80px;
-    display: block;
-    height: 200px;
-    width: 625px;
+  background-color: #ffffff;
+  opacity: 0.8;
+  border-radius: 10px;
+  padding: 18px 30px 20px;
+  margin-bottom: 80px;
+  display: block;
+  height: 200px;
+  width: 625px;
 }
-.whitebox2{
-    background-color: #ffffff;
-    opacity: 0.8;
-    border-radius: 10px;
-    padding: 18px 30px 20px;
-    margin-bottom: 80px;
-    display: block;
-    width: 625px;
-    height: fit-content;
+.whitebox2 {
+  background-color: #ffffff;
+  opacity: 0.8;
+  border-radius: 10px;
+  padding: 18px 30px 20px;
+  margin-bottom: 80px;
+  display: block;
+  width: 625px;
+  height: fit-content;
 }
 
 .whiteboxTitle {
-    padding: 0px 0px 21px 0px;
-    font-size: 30px;
+  padding: 0px 0px 21px 0px;
+  font-size: 30px;
 }
 
 .detailbox {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .activityBox {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
-.activityWrapper{
-    width: 100%;
+.activityWrapper {
+  width: 100%;
 }
 
-.activityUl{
-    padding-top: 30px;
-    padding-bottom: 5px;
-    list-style: none;
-    border-bottom: 1px solid black;
+.activityUl {
+  padding-top: 30px;
+  padding-bottom: 5px;
+  list-style: none;
+  /* border-bottom: 1px solid black; */
 }
-.activityBtn{
-    outline-style: auto;
-    padding: 1px;
-    margin-left: 20px;
+.activityBtn {
+  /* outline-style: auto; */
+  padding: 5px 10px;
+  /* margin-left: 20px; */
+  margin-left: auto;
+  box-sizing: border-box;
+  width: 100px;
+}
+
+.eventInfo {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.eventUrl {
+  margin-right: 10px;
+  width: 100%;
+  text-decoration: none;
+  color: black;
 }

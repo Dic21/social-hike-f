@@ -2,16 +2,9 @@ import React, { useEffect } from "react";
 import length from "leaflet-geometryutil";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-  MapConsumer,
-} from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import L from "leaflet";
-import { Icon } from "leaflet";
+
 import {
   inputEventName,
   inputMaxMember,

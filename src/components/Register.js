@@ -48,16 +48,15 @@ const Register = () => {
     <div className={PageStyle.wrapper}>
       <div className={PageStyle.login}>
         <div className={PageStyle.titlewrapper}>
-          <h1 className={PageStyle.title}>Register</h1>
+          <h1 className={PageStyle.title}>註冊</h1>
         </div>
 
         <div className={PageStyle.inputWrapper}>
           <div>
-           
             <input
               className={PageStyle.input}
               type="text"
-              placeholder="ID"
+              placeholder="帳號"
               onChange={(e) => {
                 dispatch(inputRegisterID(e.target.value));
               }}
@@ -67,7 +66,7 @@ const Register = () => {
             <input
               className={PageStyle.input}
               type="text"
-              placeholder="username"
+              placeholder="用戶名稱"
               onChange={(e) => {
                 dispatch(inputRegisterName(e.target.value));
               }}
@@ -75,12 +74,10 @@ const Register = () => {
           </div>
 
           <div>
-          
             <input
               className={PageStyle.password}
-
               type="password"
-              placeholder="Password"
+              placeholder="密碼"
               onChange={(e) => {
                 dispatch(inputRegisterPassword(e.target.value));
               }}
@@ -95,11 +92,11 @@ const Register = () => {
         </div>
         <div>
           <button onClick={register} className={PageStyle.btn}>
-            register
+            註冊
           </button>
         </div>
         <div className={PageStyle.navigateToRegister}>
-        已經有會員帳戶? <Link to="/login"> 按此登入你的帳戶</Link>
+          已經有會員帳戶? <Link to="/login"> 按此登入你的帳戶</Link>
         </div>
       </div>
     </div>

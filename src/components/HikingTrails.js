@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { showList,showDetails,showEvents,showComments } from "../Slices/placeSlice";
+import {
+  showList,
+  showDetails,
+  showEvents,
+  showComments,
+} from "../Slices/placeSlice";
 import { Link } from "react-router-dom";
 import placeStyle from "../Place.module.css";
 
@@ -58,33 +63,36 @@ const HikingTrails = () => {
 
   return (
     <div>
-      <h2>HikingTrails</h2>
-      <MapContainer
-        center={[22.31463, 114.15907]}
-        zoom={11}
-        scrollWheelZoom={false}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+      {/* <h2 className={placeStyle.recomtitle}>HikingTrails</h2> */}
+      <div className={placeStyle.hikingheader}>
+        <MapContainer
+          center={[22.31463, 114.15907]}
+          zoom={11}
+          scrollWheelZoom={false}
+          className={placeStyle.hikingheader}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-        {hikingTrail.map(({ position, name, distance, id }) => {
-          return (
-            <Marker key={name} position={position}>
-              <Popup>
-                <div style={{fontWeight: 600, fontSize: 20}}>{name}</div>
-                <p>全長:{distance}公里</p>
-                <button>
-                  <Link to={`/place/${id}`}>查看正在舉行的活動</Link>
-                </button>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
-      <br></br>
-      
+          {hikingTrail.map(({ position, name, distance, id }) => {
+            return (
+              <Marker key={name} position={position}>
+                <Popup>
+                  <div style={{ fontWeight: 600, fontSize: 20 }}>{name}</div>
+                  <p>全長:{distance}公里</p>
+                  <button>
+                    <Link to={`/place/${id}`}>查看正在舉行的活動</Link>
+                  </button>
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
+        <br></br>
+      </div>
+
       <div>
         <div className={placeStyle.recomtitle}>推薦地點</div>
         <div className={placeStyle.selection}>
@@ -96,7 +104,10 @@ const HikingTrails = () => {
                 className={placeStyle.linkbox}
               >
                 <div className={placeStyle.imgcontainer}>
-                  <div className={placeStyle.box} id={placeStyle[item.id]}></div>
+                  <div
+                    className={placeStyle.box}
+                    id={placeStyle[item.id]}
+                  ></div>
                   <div className={placeStyle.textbox}></div>
                 </div>
                 <div className={placeStyle.para}>
@@ -111,7 +122,6 @@ const HikingTrails = () => {
           })}
         </div>
       </div>
-
     </div>
   );
 };

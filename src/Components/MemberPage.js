@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import PageStlyle from "../MemberPage.module.css";
+import { Link } from "react-router-dom";
+import PageStyle from "../MemberPage.module.css";
 
 function MemberPage() {
   const [Member, setMember] = useState(null);
@@ -16,11 +17,11 @@ function MemberPage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      method: "GET"
+      method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-        setMember(data.user)
+        setMember(data.user);
       });
   }
   function getHistory() {
@@ -29,13 +30,13 @@ function MemberPage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      method: "GET"
+      method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-        setHistoryList(data.eventInfo)
-      })
-  };
+        setHistoryList(data.eventInfo);
+      });
+  }
 
   function handleOnClick(item) {
     fetch(`/event/${item}/member`, {
@@ -43,59 +44,72 @@ function MemberPage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      method: "Delete"
+      method: "Delete",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        console.log(item)
+        console.log(data);
+        console.log(item);
         getHistory();
-      })
+      });
   }
-
 
   return (
     <div>
-      <h2 className={PageStlyle.pagetitle}>member info</h2>
-      <p className={PageStlyle.subtitle}>Hi!  {Member ? Member.user : null}</p>
+      <h2 className={PageStyle.pagetitle}>會員資訊</h2>
+      <p className={PageStyle.subtitle}>你好! {Member ? Member.user : null}</p>
 
-      <div className={PageStlyle.wrapper}>
-        <div className={PageStlyle.whitebox}>
-          <h2 className={PageStlyle.whiteboxTitle}>Member info</h2>
-          <div className={PageStlyle.detailbox}>
+      <div className={PageStyle.wrapper}>
+        <div className={PageStyle.whitebox}>
+          <h2 className={PageStyle.whiteboxTitle}>會員資訊</h2>
+          <div className={PageStyle.detailbox}>
             <div>
-              <p>username</p>
+              <p>用戶名稱</p>
               <p>{Member ? Member.user : null}</p>
             </div>
 
             <div>
-              <p>usernId</p>
+              <p>用戶帳號</p>
               <p>{Member ? Member.userId : null}</p>
-
             </div>
           </div>
-
         </div>
       </div>
 
-      <div className={PageStlyle.wrapper}>
-        <div className={PageStlyle.whitebox2}>
-          <h2 className={PageStlyle.whiteboxTitle}>record</h2>
+      <div className={PageStyle.wrapper}>
+        <div className={PageStyle.whitebox2}>
+          <h2 className={PageStyle.whiteboxTitle}>己報名活動</h2>
 
-          <div className={PageStlyle.activityBox}>
-            <div className={PageStlyle.activityWrapper}>
-              {HistoryList ? HistoryList.map((item) => {
-                return (
-
-                  <div key={item.event_id}>
-                    <ul className={PageStlyle.activityUl}>
-                      <li>event-name: {item.event_name} </li>
-                      <li> event-Id: {item.event_id}
-                        <button className={PageStlyle.activityBtn} onClick={() => { handleOnClick(item.event_id) }}>Delete</button></li>
-                    </ul>
-                  </div>
-                )
-              }) : null}
+          <div className={PageStyle.activityBox}>
+            <div className={PageStyle.activityWrapper}>
+              {HistoryList
+                ? HistoryList.map((item) => {
+                    return (
+                      <>
+                        <div className={PageStyle.eventInfo}>
+                          <Link
+                            className={PageStyle.eventUrl}
+                            to={`/event/${item.event_id}/detail`}
+                            key={item.event_id}
+                          >
+                            <ul className={PageStyle.activityUl}>
+                              <li>活動名稱: {item.event_name} </li>
+                              <li>活動編號: {item.event_id}</li>
+                            </ul>
+                          </Link>
+                          <button
+                            className={PageStyle.activityBtn}
+                            onClick={() => {
+                              handleOnClick(item.event_id);
+                            }}
+                          >
+                            離開活動
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })
+                : null}
             </div>
           </div>
         </div>
@@ -103,6 +117,5 @@ function MemberPage() {
     </div>
   );
 }
-
 
 export default MemberPage;
