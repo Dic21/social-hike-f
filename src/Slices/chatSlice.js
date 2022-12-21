@@ -1,10 +1,11 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: "",
   messages: [],
   typingStatus: "",
   users: "",
+  host: "",
 };
 
 export const chatSlice = createSlice({
@@ -26,6 +27,9 @@ export const chatSlice = createSlice({
     logActiveUsers: function (state, action) {
       state.users = action.payload;
     },
+    logHost: function (state, action) {
+      state.host = action.payload;
+    },
   },
 });
 
@@ -34,6 +38,7 @@ export const {
   logCurrentUser,
   logTypingStatus,
   logActiveUsers,
+  logHost,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import checkPageStatus from "../utils/function";
-import {
-  inputMessages,
-  logCurrentUser,
-  logTypingStatus,
-  logActiveUsers,
-} from "../Slices/chatSlice";
+import checkPageStatus from "../utils/notification";
+import { inputMessages, logCurrentUser } from "../Slices/chatSlice";
 import { useSelector, useDispatch } from "react-redux";
+import chatStyle from "../Chat.module.css";
 
 const ChatFooter = ({ socket }) => {
-  const { currentUser, messages, typingStatus } = useSelector((state) => {
+  const { currentUser } = useSelector((state) => {
     return state.chat;
   });
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
-  // const [currentUser, setCurrentUser] = useState("");
-  const { eventID } = useParams();
+
+  const { eventId } = useParams();
   const getInfo = async () => {
     await fetch(`/get-current-user`, {
       headers: {
@@ -37,12 +33,25 @@ const ChatFooter = ({ socket }) => {
     socket.emit("typing", `${currentUser} is typing`);
   };
 
+  const getTime = () => {
+    let hour = new Date().getHours();
+    let minute = new Date().getMinutes();
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+
+    const time = `${hour}:${minute}`;
+    return time;
+    // console.log(time);
+  };
+
   const messageDetail = {
     text: message,
     name: currentUser,
     id: `${socket.id}${Math.random()}`,
     socketID: socket.id,
-    room: eventID,
+    room: eventId,
+    time: getTime(),
   };
 
   const handleSendMessage = (e) => {
@@ -55,12 +64,12 @@ const ChatFooter = ({ socket }) => {
     }
   };
   return (
-    <div className="chat__footer">
-      <form className="form" onSubmit={handleSendMessage}>
+    <div className={chatStyle.chat__footer}>
+      <form className={chatStyle.form} onSubmit={handleSendMessage}>
         <input
           type="text"
-          placeholder="Write message"
-          className="message"
+          placeholder="輸入訊息"
+          className={chatStyle.message}
           value={message}
           onFocus={getInfo}
           onChange={(e) => {
@@ -68,7 +77,7 @@ const ChatFooter = ({ socket }) => {
           }}
           onKeyDown={handleTyping}
         />
-        <button className="sendBtn">SEND</button>
+        <button className={chatStyle.sendBtn}>傳送</button>
       </form>
     </div>
   );

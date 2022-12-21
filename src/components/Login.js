@@ -7,6 +7,7 @@ import {
   logLoginErrorMessage,
   logIsLogin,
 } from "../Slices/loginSlice";
+import PageStyle from "../Login.module.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -63,50 +64,63 @@ const Login = () => {
       });
   };
   return (
-    <div>
-      <div className="login">
-        {/* <h3>Login</h3> */}
-        <input
-          className="input"
-          type="text"
-          placeholder="ID"
-          onChange={(e) => {
-            dispatch(inputLoginID(e.target.value));
-          }}
-        />
-        <input
-          className="input"
-          type="password"
-          placeholder="Password"
-          onChange={(e) => {
-            dispatch(inputLoginPassword(e.target.value));
-          }}
-        />
-        <div className="errorMsg">
+    <div className={PageStyle.wrapper}>
+      <div className={PageStyle.login}>
+        <div className={PageStyle.titlewrapper}>
+          <h1 className={PageStyle.title}>Member Login</h1>
+        </div>
+
+        <div className={PageStyle.inputWrapper}>
+          <div>
+           
+            <input
+              className={PageStyle.input}
+              type="text"
+              placeholder="username"
+              onChange={(e) => {
+                 dispatch(inputLoginID(e.target.value));
+              }}
+            ></input>
+          </div>
+          <div>
+            <input
+              className={PageStyle.password}
+              type="password"
+              placeholder="password"
+              onChange={(e) => {
+                dispatch(inputLoginPassword(e.target.value));
+              }}
+            ></input>
+          </div>
+        </div>
+
+        <div className={PageStyle.error}>
           {loginErrorMsg === "" ? null : (
             <div className="error">{loginErrorMsg}</div>
           )}
         </div>
-
-        <button onClick={login} className="btn">
+        <div>
+          <button onClick={login} className={PageStyle.btn}>
           Login
-        </button>
-
-        <div className="line"></div>
-        <div className="navigateToRegister">
-          Do not have an account? <Link to="/register">Register Here</Link>
+          </button>
+        </div>
+        <div className={PageStyle.navigateToRegister}>
+        沒有會員帳戶?<Link to="/register">立即建立你的帳戶</Link>
         </div>
       </div>
-
-      {/* <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-        buttonText="Log in with Google"
-        onSuccess={handleLogin}
-        onFailure={handleFailure}
-        cookiePolicy={"single_host_origin"}
-      ></GoogleLogin> */}
     </div>
+
   );
+
+  //     {/* <GoogleLogin
+  //       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+  //       buttonText="Log in with Google"
+  //       onSuccess={handleLogin}
+  //       onFailure={handleFailure}
+  //       cookiePolicy={"single_host_origin"}
+  //     ></GoogleLogin> */}
+  //   </div>
+  // );
 };
 
 export default Login;

@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import PageStyle from "../Login.module.css";
 
 import {
   inputRegisterID,
@@ -44,45 +45,61 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <div className="register">
-        <h3>Register</h3>
-        <input
-          className="input"
-          type="text"
-          placeholder="ID"
-          onChange={(e) => {
-            dispatch(inputRegisterID(e.target.value));
-          }}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="username"
-          onChange={(e) => {
-            dispatch(inputRegisterName(e.target.value));
-          }}
-        />
-        <input
-          className="input"
-          type="password"
-          placeholder="password"
-          onChange={(e) => {
-            dispatch(inputRegisterPassword(e.target.value));
-          }}
-        />
-        <div className="errorMsg">
+    <div className={PageStyle.wrapper}>
+      <div className={PageStyle.login}>
+        <div className={PageStyle.titlewrapper}>
+          <h1 className={PageStyle.title}>Register</h1>
+        </div>
+
+        <div className={PageStyle.inputWrapper}>
+          <div>
+           
+            <input
+              className={PageStyle.input}
+              type="text"
+              placeholder="ID"
+              onChange={(e) => {
+                dispatch(inputRegisterID(e.target.value));
+              }}
+            ></input>
+          </div>
+          <div>
+            <input
+              className={PageStyle.input}
+              type="text"
+              placeholder="username"
+              onChange={(e) => {
+                dispatch(inputRegisterName(e.target.value));
+              }}
+            ></input>
+          </div>
+
+          <div>
+          
+            <input
+              className={PageStyle.password}
+
+              type="password"
+              placeholder="Password"
+              onChange={(e) => {
+                dispatch(inputRegisterPassword(e.target.value));
+              }}
+            ></input>
+          </div>
+        </div>
+
+        <div className={PageStyle.error}>
           {registerErrorMsg === "" ? null : (
             <div className="error">{registerErrorMsg}</div>
           )}
         </div>
-
-        <button onClick={register} className="btn">
-          register
-        </button>
-        <div className="line"></div>
-        <div className="navigateToRegister">
-          Already an account? <Link to="/login">Login Here</Link>
+        <div>
+          <button onClick={register} className={PageStyle.btn}>
+            register
+          </button>
+        </div>
+        <div className={PageStyle.navigateToRegister}>
+        已經有會員帳戶? <Link to="/login"> 按此登入你的帳戶</Link>
         </div>
       </div>
     </div>

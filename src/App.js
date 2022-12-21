@@ -1,6 +1,7 @@
 import "./App.css";
 import { Route, Routes, Navigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 import Event from "./Components/Event";
 import EventDetail from "./Components/EventDetail";
 import Login from "./Components/Login";
@@ -8,15 +9,14 @@ import Register from "./Components/Register";
 import HikingTrails from "./Components/HikingTrails";
 import HikingTrailsDetail from "./Components/HikingTrailsDetail";
 import ChatPage from "./Components/ChatPage";
+import MemberPage from "./Components/MemberPage";
+
 import socketIO from "socket.io-client";
 import loginImage from "./Images/login.svg";
 import Home from "./Components/Home";
 import { useEffect, useState } from "react";
 import { logIsLogin } from "./Slices/loginSlice";
 import { useDispatch } from "react-redux";
-
-import { logCurrentUser } from "./Slices/chatSlice";
-import GetLocation from "./Components/GetLocation";
 
 const socket = socketIO.connect();
 
@@ -33,12 +33,9 @@ function IsLoggedIn(props) {
 }
 
 function Nav() {
-  // const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   const { isLogin } = useSelector((state) => {
     return state.login;
-  });
-  const { currentUser } = useSelector((state) => {
-    return state.chat;
   });
 
   const dispatch = useDispatch();
@@ -46,7 +43,7 @@ function Nav() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(logIsLogin(false));
-    dispatch(logCurrentUser(""));
+    setCurrentUser("");
   };
 
   const getCurrentUser = async () => {
@@ -56,20 +53,18 @@ function Nav() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       method: "GET",
-      // body: JSON.stringify({
-      //   eventId: 4,
-      // }),
     })
       .then((res) => res.json())
       .then((data) => {
         // console.log(data);
-        dispatch(logCurrentUser(data.user.user));
+        setCurrentUser(data.user.user);
       });
     // console.log(id);
     // console.log(currentUser);
   };
-
-  getCurrentUser();
+  if (localStorage.getItem("token")) {
+    getCurrentUser();
+  }
 
   return (
     <nav>
@@ -106,7 +101,11 @@ function Nav() {
           </>
         ) : (
           <>
-            <span>歡迎回來 {currentUser}</span>
+            <span>歡迎回來, {currentUser.toUpperCase()}</span>
+            <Link to="/member">
+              <span>會員資訊</span>
+            </Link>
+
             <Link to="/login">
               <span onClick={handleLogout}>登出</span>
             </Link>
@@ -127,6 +126,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<HikingTrails />} />
+
         <Route
           path="/login"
           element={
@@ -135,6 +135,7 @@ function App() {
             </IsLoggedIn>
           }
         />
+
         <Route
           path="/register"
           element={
@@ -143,6 +144,7 @@ function App() {
             </IsLoggedIn>
           }
         />
+
         <Route
           path="/event"
           element={
@@ -150,7 +152,19 @@ function App() {
               <Event />
             </Protected>
           }
-        ></Route>
+        />
+
+        <Route
+          path="/member"
+          element={
+            <Protected loggedIn={isLogin}>
+              <MemberPage />
+            </Protected>
+          }
+        />
+
+        <Route path="/home" element={<Home />} />
+
         <Route
           path="/event/:eventId/detail"
           element={<EventDetail socket={socket} />}
@@ -161,12 +175,12 @@ function App() {
         {/* <Route path="/chat/home" element={<Home socket={socket} />}></Route> */}
         <Route
           path="/chat/:eventId"
-          element={<ChatPage socket={socket} />}
+          element={
+            <Protected loggedIn={isLogin}>
+              <ChatPage socket={socket} />
+            </Protected>
+          }
         ></Route>
-        <Route
-          path="/event/:eventId/joiner-location"
-          element={<GetLocation />}
-        />
       </Routes>
       {/* <Routes>
         <Route path="/login" element={<Login/>}></Route>
