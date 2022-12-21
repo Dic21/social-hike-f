@@ -27,8 +27,18 @@
     height: 200px;
     width: 625px;
 }
+.whitebox2{
+    background-color: #ffffff;
+    opacity: 0.8;
+    border-radius: 10px;
+    padding: 18px 30px 20px;
+    margin-bottom: 80px;
+    display: block;
+    width: 625px;
+    height: fit-content;
+}
 
-.whiteboxtitle {
+.whiteboxTitle {
     padding: 0px 0px 21px 0px;
     font-size: 30px;
 }
@@ -46,4 +56,19 @@
 .activityBox {
     display: flex;
     justify-content: space-evenly;
+}
+.activityWrapper{
+    width: 100%;
+}
+
+.activityUl{
+    padding-top: 30px;
+    padding-bottom: 5px;
+    list-style: none;
+    border-bottom: 1px solid black;
+}
+.activityBtn{
+    outline-style: auto;
+    padding: 1px;
+    margin-left: 20px;
 }
