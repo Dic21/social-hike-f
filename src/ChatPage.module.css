@@ -1,0 +1,19 @@
+.chatBox {
+  background-color: white;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  min-width: 670px;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.joinBtn {
+  border-radius: 20px;
+  width: 100%;
+  padding: 5px 0;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.4s;
+}

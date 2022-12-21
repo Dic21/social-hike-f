@@ -6,6 +6,7 @@ import { logCurrentUser, logHost } from "../Slices/chatSlice";
 import moment from "moment";
 import "moment/locale/zh-hk";
 import { MapContainer, Marker, TileLayer, Polyline } from "react-leaflet";
+import PageStyle from "../ChatPage.module.css";
 
 const EventDetail = ({ socket }) => {
   // const [currentUser, setCurrentUser] = useState("");
@@ -134,12 +135,17 @@ const EventDetail = ({ socket }) => {
     maxnum_teammate: max,
   } = hikingTrailDetail;
 
+  //hikingTrailDetail - event_start_time
+  //moment().format - 2022-12-21T11:15:00.000Z > 2022-12-21 19:15:00
+
+
   const localStartTime = moment(startTime).format("YYYY-MM-DD HH:mm:ss");
   // const date = localStartTime?.split(":")[0].slice(0, 10);
   const date = localStartTime?.slice(0, 10);
   const hour = localStartTime?.split(" ")[1].split(":")[0];
   const minutes = localStartTime?.split(" ")[1].split(":")[1];
   const time = `${hour}:${minutes}`;
+
   //   console.log(joinedMember.length, max);
   //   console.log(joinedMember.length > max);
 
@@ -148,8 +154,10 @@ const EventDetail = ({ socket }) => {
     [end?.x, end?.y],
   ];
 
-  return (
-    <div style={{ backgroundColor: "orangered", width: "500px" }}>
+  return ( 
+  <div>
+    <div className={PageStyle.chatBox}>
+    
       <h1>{event}</h1>
 
       {start ? (
@@ -181,14 +189,18 @@ const EventDetail = ({ socket }) => {
       <h5>詳細資料:{description}</h5>
       <h5>最多人數: {max}</h5>
 
+      <div>
       <button
+      className={PageStyle.joinBtn}
         onClick={handleJoinEvent}
         disabled={joinedMember.length >= max ? true : false}
       >
         加入活動
       </button>
+      </div>
       {joinedMember.length >= max ? <p>抱歉，此活動已滿</p> : null}
-    </div>
+    </div> 
+  </div>
   );
 };
 
