@@ -61,7 +61,7 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
 
   //Talker Walkie
   const [stream, setStream] = useState(null);
-  const [audio, setAudio] = useState(true);
+  const [audio, setAudio] = useState(false);
 
   const handleStartTalk = () => {
     init();
