@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { logHikingTrailDetail, logJoinedMember } from "../Slices/eventSlice";
-import { logCurrentUser } from "../Slices/chatSlice";
+import { logCurrentUser, logHost } from "../Slices/chatSlice";
 import moment from "moment";
 import "moment/locale/zh-hk";
 import { MapContainer, Marker, TileLayer, Polyline } from "react-leaflet";
@@ -38,6 +38,7 @@ const EventDetail = ({ socket }) => {
   };
 
   const addUserToChatroom = () => {
+    let owner;
     fetch(`/get-current-user`, {
       headers: {
         "Content-Type": "application/json",
@@ -51,11 +52,18 @@ const EventDetail = ({ socket }) => {
         // setCurrentUser(data.user);
         dispatch(logCurrentUser(data.user.user));
         // console.log(typeof eventID);
-        console.log(currentUser);
+        console.log("user", data.user.user);
+        console.log("host", host);
         // console.log("JOIN", eventID);
+        if (data.user.user === host) {
+          owner = host;
+        } else {
+          owner = "";
+        }
         socket.emit("newUser", {
           currentUser: data.user.user,
           socketID: socket.id,
+          owner,
         });
         socket.emit("join", eventId);
       });
@@ -72,6 +80,7 @@ const EventDetail = ({ socket }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+
         alert(data.message);
       });
   };
