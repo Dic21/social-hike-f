@@ -80,6 +80,7 @@ const GetLocation = () => {
         })}
       </MapContainer>
       {positionData.length === 0 ? <p>Finding your location...</p> : null}
+      <button onClick={handleClick}>Back to chat</button>
     </div>
   );
 };
