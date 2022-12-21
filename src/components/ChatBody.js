@@ -8,6 +8,7 @@ import axios from "axios";
 
 const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   const [talk, setTalk] = useState(false);
+  const webAudio = useRef();
   const navigate = useNavigate();
 
   const { eventId } = useParams();
@@ -58,29 +59,40 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
   // console.log(messages);
   // console.log(hikingTrailDetail.host);
 
+  //Talker Walkie
+  const [stream, setStream] = useState(null);
+  const [audio, setAudio] = useState(true);
+
   const handleStartTalk = () => {
     init();
     setTalk(true);
   };
-  let stream;
-  const muteStream = () => {
-    stream.getAudioTracks()[0].enabled = false;
+  // const muteStream = () => {
+  //   stream.getAudioTracks()[0].enabled = false;
+  // };
+
+  // const unmuteStream = () => {
+  //   stream.getAudioTracks()[0].enabled = true;
+  // };
+
+  const toggleAudio = () => {
+    setAudio(!audio);
+    stream.getAudioTracks()[0].enabled = audio;
   };
 
-  const unmuteStream = () => {
-    stream.getAudioTracks()[0].enabled = true;
-  };
 
   const init = async () => {
-    stream = await navigator.mediaDevices.getUserMedia({
+    let newStream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
     });
     // document.getElementById("video").srcObject = stream;
     const peer = createPeer();
-    stream.getTracks().forEach((track) => {
-      peer.addTrack(track, stream);
+    newStream.getTracks().forEach((track) => {
+      peer.addTrack(track, newStream);
     });
+    console.log(newStream);
+    setStream(newStream);
   };
 
   const createPeer = () => {
@@ -110,6 +122,49 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
     peer.setRemoteDescription(desc).catch((e) => console.log(e));
   };
 
+  //Walkie Viewer
+  const handleListenWalkie =()=>{
+    initListen();
+  }
+
+  const initListen = async()=> {
+    const peer = createPeerViewer();
+    // peer.addTransceiver("video", { direction: "recvonly" })
+    peer.addTransceiver("audio", { direction: "sendrecv" })
+  }
+
+  const createPeerViewer =()=>{
+    const peer = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: "stun:stun.stunprotocol.org"
+        }
+      ]
+    });
+    peer.ontrack = handleTrackEvent;
+    peer.onnegotiationneeded = () => handleNegotiationNeededEventViewer(peer);
+
+    return peer;
+  }
+
+  const handleNegotiationNeededEventViewer= async(peer)=> {
+    const offer = await peer.createOffer();
+    await peer.setLocalDescription(offer);
+    const payload = {
+      sdp: peer.localDescription
+    };
+
+    const { data } = await axios.post('/walkie/consumer', payload);
+    const desc = new RTCSessionDescription(data.sdp);
+    peer.setRemoteDescription(desc).catch(e => console.log(e));
+  }
+
+  function handleTrackEvent(e) {
+    // document.getElementById("video").srcObject = e.streams[0];
+    webAudio.current.srcObject = e.streams[0];
+  };
+
+
   useEffect(() => {
     getEventDetail();
   }, []);
@@ -127,20 +182,22 @@ const ChatBody = ({ typingStatus, lastMessageRef, socket }) => {
               開啟實時對話
             </button>
             {talk ? (
+              <>
               <button
                 className={chatStyle.walkie__btn}
                 id={chatStyle.pressTalk}
-                onMouseDown={unmuteStream}
-                onMouseUp={muteStream}
+                onClick={toggleAudio}
+               
               >
-                按住以說話
+                {audio? "關咪中":"開咪中"}
               </button>
+              </>
             ) : null}
           </div>
         ) : (
           <div>
-            {/* <audio autoplay id="video"></audio> */}
-            <button className={chatStyle.walkie__btn} onClick={handleLeaveChat}>
+            <audio ref={webAudio} autoPlay></audio>
+            <button className={chatStyle.walkie__btn} onClick={handleListenWalkie}>
               收聽對講機
             </button>
           </div>
