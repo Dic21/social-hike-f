@@ -81,7 +81,6 @@ function App() {
         />
 
         <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
-        <Route path="/place/:placeId" element={<HikingTrailsDetail />} />
 
         <Route
           path="/chat/:eventId"
