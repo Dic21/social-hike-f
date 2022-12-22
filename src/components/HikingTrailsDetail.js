@@ -216,9 +216,7 @@ const Modal=(props)=>{
   };
 
   const handleCmInput = (e)=>{
-    setTimeout(()=>{
-      dispatch(updateText(e.target.value));
-    }, 300)
+    dispatch(updateText(e.target.value));
   }
 
   const handleFileInput = ()=>{
